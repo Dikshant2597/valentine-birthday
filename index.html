@@ -113,23 +113,6 @@ button{
   width:300px;
   text-align:center;
 }
-
-/* END (FIXED) */
-#end{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.75);
-  color:white;
-  display:none;          /* ✅ KEY FIX */
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  font-size:38px;
-  font-weight:bold;
-}
-#end.show{
-  display:flex;
-}
 </style>
 </head>
 
@@ -165,13 +148,6 @@ button{
   </div>
 </div>
 
-<!-- END -->
-<div id="end">
-  Happy Valentine’s Day ❤️<br>
-  & Happy Birthday 🎂<br>
-  Baby
-</div>
-
 <audio id="romanticMusic" src="music/romantic.mp3" loop></audio>
 <audio id="birthdayMusic" src="music/birthday.mp3"></audio>
 
@@ -204,7 +180,6 @@ const action=document.getElementById("action");
 const modal=document.getElementById("modal");
 const modalText=document.getElementById("modalText");
 const modalBtn=document.getElementById("modalBtn");
-const end=document.getElementById("end");
 
 const rm=document.getElementById("romanticMusic");
 const bm=document.getElementById("birthdayMusic");
@@ -265,8 +240,9 @@ function loadSlide(){
             loadSlide();
           });
         }else{
+          // END REMOVED ON PURPOSE
           bm.pause();
-          end.classList.add("show");   // ✅ only here
+          banner.textContent="That’s all… ❤️";
         }
       }else{
         inner.className="inner";
