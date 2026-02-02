@@ -2,23 +2,55 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>For You ❤️</title>
 
 <style>
+/* ---------- BASE ---------- */
 body{
   margin:0;
   font-family:system-ui,sans-serif;
-  background:radial-gradient(circle at top,#fff0f6,#ffd6e7);
   display:flex;
   justify-content:center;
   align-items:center;
   min-height:100vh;
   overflow:hidden;
+  transition:background 1s ease;
 }
-
 .hidden{display:none;}
 
+/* ---------- THEMES ---------- */
+body.valentine{
+  background:radial-gradient(circle at top,#fff0f6,#ffb3c6);
+}
+body.birthday{
+  background:radial-gradient(circle at top,#fff7d6,#ffd166);
+}
+
+/* ---------- FLOATING DECOR ---------- */
+.floating{
+  position:fixed;
+  top:-10%;
+  font-size:24px;
+  animation:floatDown linear infinite;
+  opacity:.8;
+}
+@keyframes floatDown{
+  to{transform:translateY(120vh);}
+}
+
+/* ---------- BANNERS ---------- */
+.banner{
+  position:fixed;
+  top:12px;
+  width:100%;
+  text-align:center;
+  font-size:22px;
+  font-weight:700;
+  z-index:10;
+}
+
+/* ---------- START CARD ---------- */
 .white-card{
   background:white;
   padding:30px;
@@ -27,45 +59,36 @@ body{
   text-align:center;
   width:320px;
 }
-
-.button-zone{
-  position:relative;
-  height:120px;
-  margin-top:20px;
-}
-
+.button-zone{position:relative;height:120px;margin-top:20px;}
 button{
-  padding:14px 24px;
+  padding:14px 26px;
   border-radius:999px;
   border:none;
   font-size:16px;
   font-weight:700;
   cursor:pointer;
 }
-
 #yesBtn{background:#ff3b7a;color:white;}
 #noBtn{background:#e5e7eb;position:absolute;}
 
-.stage{
-  width:360px;
-  position:relative;
-  text-align:center;
-}
-
+/* ---------- SLIDES ---------- */
+.stage{width:360px;text-align:center;position:relative;}
 .photo-card{
   width:100%;
   aspect-ratio:3/4;
   perspective:1200px;
   margin:auto;
+  opacity:0;
+  transition:opacity .6s ease;
 }
+.photo-card.show{opacity:1;}
 
 .inner{
   width:100%;
   height:100%;
-  transition:transform .8s;
+  transition:transform .8s ease;
   transform-style:preserve-3d;
 }
-
 .flipped .inner{transform:rotateY(180deg);}
 
 .side{
@@ -80,14 +103,12 @@ button{
   align-items:center;
   padding:18px;
 }
-
 .front img{
   width:100%;
   height:100%;
   object-fit:cover;
   border-radius:20px;
 }
-
 .back{
   background:white;
   transform:rotateY(180deg);
@@ -95,26 +116,54 @@ button{
   line-height:1.5;
 }
 
-.action{
-  position:absolute;
-  right:-90px;
-  top:40%;
-  background:none;
-  color:#ff3b7a;
-  font-size:16px;
+/* ---------- ACTION BUTTON ---------- */
+.action-btn{
+  margin-top:16px;
+  background:#ff3b7a;
+  color:white;
+}
+body.birthday .action-btn{
+  background:#ff9f1c;
 }
 
-.fade-left{
-  animation:fadeLeft 1s forwards;
+/* ---------- MODAL ---------- */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:50;
+}
+.modal-card{
+  background:white;
+  padding:26px;
+  border-radius:22px;
+  text-align:center;
+  width:300px;
 }
 
-@keyframes fadeLeft{
-  to{opacity:0;transform:translateX(-120%);}
+/* ---------- END SCREEN ---------- */
+.end{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,.6);
+  color:white;
+  font-size:40px;
+  font-weight:800;
+  text-align:center;
+  z-index:100;
 }
 </style>
 </head>
 
 <body>
+
+<div class="banner hidden" id="banner"></div>
 
 <!-- START -->
 <div class="white-card" id="start">
@@ -133,19 +182,32 @@ button{
       <div class="side back" id="msg"></div>
     </div>
   </div>
-  <button class="action hidden" id="actionBtn">Click me 💖</button>
+  <button class="action-btn hidden" id="actionBtn">Click me 💖</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal hidden" id="modal">
+  <div class="modal-card">
+    <p id="modalText"></p>
+    <button onclick="closeModal()">Okay 💖</button>
+  </div>
+</div>
+
+<!-- END -->
+<div class="end hidden" id="end">
+  Happy Valentine’s Day ❤️<br>and Happy Birthday 🎂
 </div>
 
 <audio id="romanticMusic" src="music/romantic.mp3" loop></audio>
 <audio id="birthdayMusic" src="music/birthday.mp3"></audio>
 
 <script>
+/* DATA */
 const romantic=[
  {img:"photos/romantic/romantic1.jpg",msg:"My favorite place has always been right next to you."},
  {img:"photos/romantic/romantic2.jpg",msg:"I love seeing this soft, cozy side of you — it feels like home."},
  {img:"photos/romantic/romantic3.jpg",msg:"Even the simplest days feel special when I’m with you."}
 ];
-
 const birthday=[
  {img:"photos/birthday/birthday1.jpg",msg:"The woman who makes every room brighter just by being in it."},
  {img:"photos/birthday/birthday2.jpg",msg:"You carry grace, strength, and kindness so effortlessly."},
@@ -155,41 +217,69 @@ const birthday=[
  {img:"photos/birthday/birthday6.jpg",msg:"Growing older with you sounds like my favorite plan."}
 ];
 
-let phase="romantic", index=0, noCount=0;
+let phase="romantic",i=0,noCount=0;
 
+/* ELEMENTS */
+const body=document.body;
 const start=document.getElementById("start");
 const stage=document.getElementById("stage");
 const card=document.getElementById("card");
 const img=document.getElementById("img");
 const msg=document.getElementById("msg");
 const btn=document.getElementById("actionBtn");
+const modal=document.getElementById("modal");
+const modalText=document.getElementById("modalText");
+const banner=document.getElementById("banner");
+const end=document.getElementById("end");
 
 const rm=document.getElementById("romanticMusic");
 const bm=document.getElementById("birthdayMusic");
 
+/* MODAL */
+function showModal(text){
+  modalText.textContent=text;
+  modal.classList.remove("hidden");
+}
+function closeModal(){
+  modal.classList.add("hidden");
+}
+
+/* NO BUTTON */
 document.getElementById("zone").onmousemove=()=>{
   const no=document.getElementById("noBtn");
   no.style.left=Math.random()*180+"px";
   no.style.top=Math.random()*80+"px";
   noCount++;
   if(noCount===4){
-    alert("Haha 😌 there’s no escape from me.\nAll you can do now is press YES 💕");
+    showModal("Haha 😌 there’s no escape from me.\nAll you can do now is press YES 💕");
   }
 };
 
+/* YES */
 document.getElementById("yesBtn").onclick=()=>{
   start.classList.add("hidden");
+  body.classList.add("valentine");
+  banner.textContent="Happy Valentine’s Day, Baby ❤️";
+  banner.classList.remove("hidden");
   stage.classList.remove("hidden");
   rm.play();
   loadSlide();
 };
 
+/* SLIDES */
 function loadSlide(){
   const data=phase==="romantic"?romantic:birthday;
   card.className="photo-card";
-  img.src=data[index].img;
-  msg.textContent=data[index].msg;
-  btn.classList.remove("hidden");
+  btn.classList.add("hidden");
+
+  const preload=new Image();
+  preload.src=data[i].img;
+  preload.onload=()=>{
+    img.src=preload.src;
+    msg.textContent=data[i].msg;
+    card.classList.add("show");
+    btn.classList.remove("hidden");
+  };
 
   btn.onclick=()=>{
     card.classList.add("flipped");
@@ -197,26 +287,26 @@ function loadSlide(){
 
     setTimeout(()=>{
       card.classList.remove("flipped");
-      card.classList.add("fade-left");
+      card.classList.remove("show");
 
       setTimeout(()=>{
-        index++;
-        if(index>=data.length){
+        i++;
+        if(i>=data.length){
           if(phase==="romantic"){
-            phase="birthday";
-            index=0;
+            phase="birthday";i=0;
             rm.pause();
-            if(confirm("Okay… now it’s time to turn the energy up 🎉")){
-              bm.play();
-              loadSlide();
-            }
+            showModal("Okay… now it’s time to turn the energy up 🎉");
+            closeModal();
+            body.classList.remove("valentine");
+            body.classList.add("birthday");
+            banner.textContent="Happy Birthday, Baby 🎂";
+            bm.play();
+            loadSlide();
           }else{
-            alert("Happy Valentine’s Day ❤️\nAnd Happy Birthday 🎂");
+            end.classList.remove("hidden");
           }
-        }else{
-          loadSlide();
-        }
-      },1000);
+        }else loadSlide();
+      },600);
     },6000);
   };
 }
