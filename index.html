@@ -96,23 +96,6 @@ button{
   background:#ff3b7a;
   color:white;
 }
-
-/* MODAL */
-#modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-#modalBox{
-  background:white;
-  padding:22px;
-  border-radius:20px;
-  width:300px;
-  text-align:center;
-}
 </style>
 </head>
 
@@ -138,14 +121,6 @@ button{
     </div>
   </div>
   <button id="action" class="hidden">Click me 💖</button>
-</div>
-
-<!-- MODAL -->
-<div id="modal" class="hidden">
-  <div id="modalBox">
-    <p id="modalText"></p>
-    <button id="modalBtn">Okay 💖</button>
-  </div>
 </div>
 
 <audio id="romanticMusic" src="music/romantic.mp3" loop></audio>
@@ -177,22 +152,9 @@ const img=document.getElementById("img");
 const msg=document.getElementById("msg");
 const inner=document.getElementById("inner");
 const action=document.getElementById("action");
-const modal=document.getElementById("modal");
-const modalText=document.getElementById("modalText");
-const modalBtn=document.getElementById("modalBtn");
 
 const rm=document.getElementById("romanticMusic");
 const bm=document.getElementById("birthdayMusic");
-
-/* MODAL */
-function showModal(text,cb){
-  modalText.textContent=text;
-  modal.classList.remove("hidden");
-  modalBtn.onclick=()=>{
-    modal.classList.add("hidden");
-    if(cb) cb();
-  };
-}
 
 /* NO BUTTON */
 document.getElementById("zone").onmousemove=()=>{
@@ -201,7 +163,7 @@ document.getElementById("zone").onmousemove=()=>{
   no.style.top=Math.random()*80+"px";
   noCount++;
   if(noCount===4){
-    showModal("Haha 😌 there’s no escape from me. Press YES 💕");
+    alert("Haha 😌 there’s no escape from me. Just press YES 💕");
   }
 };
 
@@ -231,16 +193,14 @@ function loadSlide(){
       index++;
       if(index>=data.length){
         if(phase==="romantic"){
-          showModal("Okay… now it’s time to turn the energy up 🎉",()=>{
-            phase="birthday";
-            index=0;
-            rm.pause(); rm.currentTime=0;
-            banner.textContent="Happy Birthday, Baby 🎂";
-            bm.play();
-            loadSlide();
-          });
+          alert("Okay… now it’s time to turn the energy up 🎉");
+          phase="birthday";
+          index=0;
+          rm.pause(); rm.currentTime=0;
+          banner.textContent="Happy Birthday, Baby 🎂";
+          bm.play();
+          loadSlide();
         }else{
-          // END REMOVED ON PURPOSE
           bm.pause();
           banner.textContent="That’s all… ❤️";
         }
