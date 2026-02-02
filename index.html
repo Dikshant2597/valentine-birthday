@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You ❤️</title>
 
 <style>
@@ -16,111 +16,124 @@ body{
   min-height:100vh;
   overflow:hidden;
 }
+
 .hidden{display:none;}
-.stage{width:90vw;max-width:420px;text-align:center;}
+
 .white-card{
   background:white;
-  padding:28px;
+  padding:30px;
   border-radius:22px;
-  box-shadow:0 18px 50px rgba(0,0,0,.15);
+  box-shadow:0 20px 50px rgba(0,0,0,.2);
+  text-align:center;
+  width:320px;
 }
-.button-zone{position:relative;height:140px;margin-top:20px;}
+
+.button-zone{
+  position:relative;
+  height:120px;
+  margin-top:20px;
+}
+
 button{
-  padding:14px 26px;
+  padding:14px 24px;
   border-radius:999px;
   border:none;
   font-size:16px;
   font-weight:700;
   cursor:pointer;
 }
+
 #yesBtn{background:#ff3b7a;color:white;}
 #noBtn{background:#e5e7eb;position:absolute;}
 
-.card{
+.stage{
+  width:360px;
+  position:relative;
+  text-align:center;
+}
+
+.photo-card{
   width:100%;
   aspect-ratio:3/4;
   perspective:1200px;
   margin:auto;
 }
+
 .inner{
   width:100%;
   height:100%;
-  transition:transform .8s ease;
+  transition:transform .8s;
   transform-style:preserve-3d;
-  position:relative;
 }
-.card.flipped .inner{transform:rotateY(180deg);}
+
+.flipped .inner{transform:rotateY(180deg);}
+
 .side{
   position:absolute;
   width:100%;
   height:100%;
   backface-visibility:hidden;
   border-radius:20px;
-  box-shadow:0 15px 40px rgba(0,0,0,.2);
+  box-shadow:0 15px 40px rgba(0,0,0,.25);
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:16px;
+  padding:18px;
 }
+
 .front img{
   width:100%;
   height:100%;
   object-fit:cover;
   border-radius:20px;
 }
+
 .back{
   background:white;
   transform:rotateY(180deg);
   font-size:18px;
   line-height:1.5;
 }
-#clickBtn{
-  margin-top:14px;
+
+.action{
+  position:absolute;
+  right:-90px;
+  top:40%;
   background:none;
   color:#ff3b7a;
   font-size:16px;
-  z-index:10;
 }
-.slide-out{
-  animation:slideOut 1s forwards;
+
+.fade-left{
+  animation:fadeLeft 1s forwards;
 }
-@keyframes slideOut{
-  to{transform:translateX(-120%);opacity:0;}
+
+@keyframes fadeLeft{
+  to{opacity:0;transform:translateX(-120%);}
 }
 </style>
 </head>
 
 <body>
 
-<!-- START SCREEN -->
-<div class="stage" id="start">
-  <div class="white-card">
-    <h1>Baby, will you be my Valentine? 💕</h1>
-    <div class="button-zone" id="zone">
-      <button id="yesBtn">Yes</button>
-      <button id="noBtn">No</button>
-    </div>
-    <p style="opacity:.7">(No is feeling shy 😈)</p>
+<!-- START -->
+<div class="white-card" id="start">
+  <h2>Will you be my Valentine? 💕</h2>
+  <div class="button-zone" id="zone">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
   </div>
 </div>
 
-<!-- SLIDESHOW -->
-<div class="stage hidden" id="show">
-  <h2 id="title"></h2>
-  <div class="card" id="card">
+<!-- SLIDES -->
+<div class="stage hidden" id="stage">
+  <div class="photo-card" id="card">
     <div class="inner">
-      <div class="side front"><img id="photo"></div>
+      <div class="side front"><img id="img"></div>
       <div class="side back" id="msg"></div>
     </div>
   </div>
-  <button id="clickBtn" class="hidden">Click me 💖</button>
-</div>
-
-<!-- TRANSITION -->
-<div class="stage hidden" id="transition">
-  <div class="white-card">
-    <h2>Okay… now it’s time to turn the energy up 🎉</h2>
-  </div>
+  <button class="action hidden" id="actionBtn">Click me 💖</button>
 </div>
 
 <audio id="romanticMusic" src="music/romantic.mp3" loop></audio>
@@ -132,6 +145,7 @@ const romantic=[
  {img:"photos/romantic/romantic2.jpg",msg:"I love seeing this soft, cozy side of you — it feels like home."},
  {img:"photos/romantic/romantic3.jpg",msg:"Even the simplest days feel special when I’m with you."}
 ];
+
 const birthday=[
  {img:"photos/birthday/birthday1.jpg",msg:"The woman who makes every room brighter just by being in it."},
  {img:"photos/birthday/birthday2.jpg",msg:"You carry grace, strength, and kindness so effortlessly."},
@@ -141,87 +155,70 @@ const birthday=[
  {img:"photos/birthday/birthday6.jpg",msg:"Growing older with you sounds like my favorite plan."}
 ];
 
-let phase="romantic", index=0;
-let noCount=0, popupShown=false;
+let phase="romantic", index=0, noCount=0;
 
 const start=document.getElementById("start");
-const show=document.getElementById("show");
-const transition=document.getElementById("transition");
+const stage=document.getElementById("stage");
 const card=document.getElementById("card");
-const photo=document.getElementById("photo");
+const img=document.getElementById("img");
 const msg=document.getElementById("msg");
-const clickBtn=document.getElementById("clickBtn");
-const title=document.getElementById("title");
+const btn=document.getElementById("actionBtn");
 
 const rm=document.getElementById("romanticMusic");
 const bm=document.getElementById("birthdayMusic");
 
-/* NO button logic */
-document.getElementById("zone").addEventListener("mousemove",()=>{
+document.getElementById("zone").onmousemove=()=>{
   const no=document.getElementById("noBtn");
-  no.style.left=Math.random()*200+"px";
+  no.style.left=Math.random()*180+"px";
   no.style.top=Math.random()*80+"px";
   noCount++;
-  if(noCount>=3 && !popupShown){
-    popupShown=true;
+  if(noCount===4){
     alert("Haha 😌 there’s no escape from me.\nAll you can do now is press YES 💕");
   }
-});
+};
 
-/* YES click */
 document.getElementById("yesBtn").onclick=()=>{
   start.classList.add("hidden");
-  show.classList.remove("hidden");
+  stage.classList.remove("hidden");
   rm.play();
   loadSlide();
 };
 
 function loadSlide(){
   const data=phase==="romantic"?romantic:birthday;
-  title.textContent=phase==="romantic"?"Us 🤍":"It’s Your Birthday 🎂";
-  card.className="card";
-  photo.src=data[index].img;
+  card.className="photo-card";
+  img.src=data[index].img;
   msg.textContent=data[index].msg;
-  clickBtn.classList.add("hidden");
+  btn.classList.remove("hidden");
 
-  setTimeout(()=>clickBtn.classList.remove("hidden"),2500);
-
-  clickBtn.onclick=()=>{
+  btn.onclick=()=>{
     card.classList.add("flipped");
-    clickBtn.classList.add("hidden");
+    btn.classList.add("hidden");
 
     setTimeout(()=>{
       card.classList.remove("flipped");
-      card.classList.add("slide-out");
-      setTimeout(nextSlide,1000);
-    },4000);
-  };
-}
-
-function nextSlide(){
-  index++;
-  const data=phase==="romantic"?romantic:birthday;
-
-  if(index>=data.length){
-    if(phase==="romantic"){
-      phase="birthday";
-      index=0;
-      rm.pause();
-      transition.classList.remove("hidden");
+      card.classList.add("fade-left");
 
       setTimeout(()=>{
-        transition.classList.add("hidden");
-        bm.play();
-        loadSlide();
-      },2500);
-      return;
-    }else{
-      title.innerHTML="Happy Valentine’s Day ❤️<br>and Happy Birthday 🎂";
-      clickBtn.style.display="none";
-      return;
-    }
-  }
-  loadSlide();
+        index++;
+        if(index>=data.length){
+          if(phase==="romantic"){
+            phase="birthday";
+            index=0;
+            rm.pause();
+            if(confirm("Okay… now it’s time to turn the energy up 🎉")){
+              bm.play();
+              loadSlide();
+            }
+          }else{
+            alert("Happy Valentine’s Day ❤️\nAnd Happy Birthday 🎂");
+          }
+        }else{
+          loadSlide();
+        }
+      },1000);
+    },6000);
+  };
 }
 </script>
 
