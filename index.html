@@ -8,119 +8,132 @@
 <style>
 body{
   margin:0;
-  font-family:Arial,sans-serif;
-  background:#ffeef4;
+  font-family:system-ui,sans-serif;
+  background:radial-gradient(circle at top,#fff0f6,#ffd6e7);
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
+  min-height:100vh;
   overflow:hidden;
 }
-.hidden{display:none}
 
-/* BANNER */
-#banner{
-  position:fixed;
-  top:15px;
-  width:100%;
-  text-align:center;
-  font-size:22px;
-  font-weight:bold;
-}
+.hidden{display:none;}
 
-/* START CARD */
-.card{
+.white-card{
   background:white;
-  padding:25px;
-  border-radius:20px;
-  width:320px;
+  padding:30px;
+  border-radius:22px;
+  box-shadow:0 20px 50px rgba(0,0,0,.2);
   text-align:center;
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  width:320px;
 }
-.buttons{
+
+.button-zone{
   position:relative;
   height:120px;
   margin-top:20px;
 }
+
 button{
-  padding:12px 22px;
-  border:none;
+  padding:14px 24px;
   border-radius:999px;
+  border:none;
   font-size:16px;
-  font-weight:bold;
+  font-weight:700;
   cursor:pointer;
 }
-#yes{background:#ff3b7a;color:white}
-#no{background:#ddd;position:absolute}
 
-/* SLIDES */
-#stage{
+#yesBtn{background:#ff3b7a;color:white;}
+#noBtn{background:#e5e7eb;position:absolute;}
+
+.stage{
   width:360px;
+  position:relative;
   text-align:center;
 }
-#photoBox{
+
+.photo-card{
   width:100%;
   aspect-ratio:3/4;
-  perspective:1000px;
+  perspective:1200px;
+  margin:auto;
 }
+
 .inner{
   width:100%;
   height:100%;
   transition:transform .8s;
   transform-style:preserve-3d;
 }
-.flip .inner{transform:rotateY(180deg)}
-.face{
+
+.flipped .inner{transform:rotateY(180deg);}
+
+.side{
   position:absolute;
-  inset:0;
+  width:100%;
+  height:100%;
   backface-visibility:hidden;
   border-radius:20px;
-  overflow:hidden;
-  background:white;
+  box-shadow:0 15px 40px rgba(0,0,0,.25);
   display:flex;
   justify-content:center;
   align-items:center;
+  padding:18px;
 }
-.face img{
+
+.front img{
   width:100%;
   height:100%;
   object-fit:cover;
+  border-radius:20px;
 }
+
 .back{
+  background:white;
   transform:rotateY(180deg);
-  padding:18px;
   font-size:18px;
+  line-height:1.5;
 }
-#action{
-  margin-top:15px;
-  background:#ff3b7a;
-  color:white;
+
+.action{
+  position:absolute;
+  right:-90px;
+  top:40%;
+  background:none;
+  color:#ff3b7a;
+  font-size:16px;
+}
+
+.fade-left{
+  animation:fadeLeft 1s forwards;
+}
+
+@keyframes fadeLeft{
+  to{opacity:0;transform:translateX(-120%);}
 }
 </style>
 </head>
 
 <body>
 
-<div id="banner" class="hidden"></div>
-
 <!-- START -->
-<div id="start" class="card">
+<div class="white-card" id="start">
   <h2>Will you be my Valentine? 💕</h2>
-  <div class="buttons" id="zone">
-    <button id="yes">Yes</button>
-    <button id="no">No</button>
+  <div class="button-zone" id="zone">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
   </div>
 </div>
 
 <!-- SLIDES -->
-<div id="stage" class="hidden">
-  <div id="photoBox">
-    <div class="inner" id="inner">
-      <div class="face"><img id="img"></div>
-      <div class="face back" id="msg"></div>
+<div class="stage hidden" id="stage">
+  <div class="photo-card" id="card">
+    <div class="inner">
+      <div class="side front"><img id="img"></div>
+      <div class="side back" id="msg"></div>
     </div>
   </div>
-  <button id="action" class="hidden">Click me 💖</button>
+  <button class="action hidden" id="actionBtn">Click me 💖</button>
 </div>
 
 <audio id="romanticMusic" src="music/romantic.mp3" loop></audio>
@@ -132,46 +145,40 @@ const romantic=[
  {img:"photos/romantic/romantic2.jpg",msg:"I love seeing this soft, cozy side of you — it feels like home."},
  {img:"photos/romantic/romantic3.jpg",msg:"Even the simplest days feel special when I’m with you."}
 ];
+
 const birthday=[
- {img:"photos/birthday/birthday1.jpg",msg:"You make every room brighter."},
- {img:"photos/birthday/birthday2.jpg",msg:"Grace, kindness, and that smile."},
- {img:"photos/birthday/birthday3.jpg",msg:"I love how real you are."},
- {img:"photos/birthday/birthday4.jpg",msg:"Cute and mischievous 😌"},
- {img:"photos/birthday/birthday5.jpg",msg:"You make silly moments magical."},
- {img:"photos/birthday/birthday6.jpg",msg:"Growing older with you feels right."}
+ {img:"photos/birthday/birthday1.jpg",msg:"The woman who makes every room brighter just by being in it."},
+ {img:"photos/birthday/birthday2.jpg",msg:"You carry grace, strength, and kindness so effortlessly."},
+ {img:"photos/birthday/birthday3.jpg",msg:"I love how comfortable and real you are — always."},
+ {img:"photos/birthday/birthday4.jpg",msg:"Cute, mischievous, and impossible to ignore 😌"},
+ {img:"photos/birthday/birthday5.jpg",msg:"You make even the silliest moments unforgettable."},
+ {img:"photos/birthday/birthday6.jpg",msg:"Growing older with you sounds like my favorite plan."}
 ];
 
-let phase="romantic";
-let index=0;
-let noCount=0;
+let phase="romantic", index=0, noCount=0;
 
-const banner=document.getElementById("banner");
 const start=document.getElementById("start");
 const stage=document.getElementById("stage");
+const card=document.getElementById("card");
 const img=document.getElementById("img");
 const msg=document.getElementById("msg");
-const inner=document.getElementById("inner");
-const action=document.getElementById("action");
+const btn=document.getElementById("actionBtn");
 
 const rm=document.getElementById("romanticMusic");
 const bm=document.getElementById("birthdayMusic");
 
-/* NO BUTTON */
 document.getElementById("zone").onmousemove=()=>{
-  const no=document.getElementById("no");
+  const no=document.getElementById("noBtn");
   no.style.left=Math.random()*180+"px";
   no.style.top=Math.random()*80+"px";
   noCount++;
   if(noCount===4){
-    alert("Haha 😌 there’s no escape from me. Just press YES 💕");
+    alert("Haha 😌 there’s no escape from me.\nAll you can do now is press YES 💕");
   }
 };
 
-/* YES */
-document.getElementById("yes").onclick=()=>{
+document.getElementById("yesBtn").onclick=()=>{
   start.classList.add("hidden");
-  banner.textContent="Happy Valentine’s Day, Baby ❤️";
-  banner.classList.remove("hidden");
   stage.classList.remove("hidden");
   rm.play();
   loadSlide();
@@ -179,35 +186,37 @@ document.getElementById("yes").onclick=()=>{
 
 function loadSlide(){
   const data=phase==="romantic"?romantic:birthday;
-  action.classList.add("hidden");
-  inner.className="inner";
+  card.className="photo-card";
   img.src=data[index].img;
   msg.textContent=data[index].msg;
+  btn.classList.remove("hidden");
 
-  action.classList.remove("hidden");
-  action.onclick=()=>{
-    inner.classList.add("flip");
-    action.classList.add("hidden");
+  btn.onclick=()=>{
+    card.classList.add("flipped");
+    btn.classList.add("hidden");
 
     setTimeout(()=>{
-      index++;
-      if(index>=data.length){
-        if(phase==="romantic"){
-          alert("Okay… now it’s time to turn the energy up 🎉");
-          phase="birthday";
-          index=0;
-          rm.pause(); rm.currentTime=0;
-          banner.textContent="Happy Birthday, Baby 🎂";
-          bm.play();
-          loadSlide();
+      card.classList.remove("flipped");
+      card.classList.add("fade-left");
+
+      setTimeout(()=>{
+        index++;
+        if(index>=data.length){
+          if(phase==="romantic"){
+            phase="birthday";
+            index=0;
+            rm.pause();
+            if(confirm("Okay… now it’s time to turn the energy up 🎉")){
+              bm.play();
+              loadSlide();
+            }
+          }else{
+            alert("Happy Valentine’s Day ❤️\nAnd Happy Birthday 🎂");
+          }
         }else{
-          bm.pause();
-          banner.textContent="That’s all… ❤️";
+          loadSlide();
         }
-      }else{
-        inner.className="inner";
-        loadSlide();
-      }
+      },1000);
     },6000);
   };
 }
