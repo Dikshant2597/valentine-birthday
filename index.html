@@ -6,19 +6,60 @@
 <title>For You ❤️</title>
 
 <style>
+/* ===== BASE ===== */
 body{
   margin:0;
   font-family:system-ui,sans-serif;
-  background:radial-gradient(circle at top,#fff0f6,#ffd6e7);
+  min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  min-height:100vh;
   overflow:hidden;
+  transition:background 1s ease;
 }
 
-.hidden{display:none;}
+/* THEMES */
+body.valentine{
+  background:radial-gradient(circle at top,#ffe6ef,#ffb3c6);
+}
+body.birthday{
+  background:radial-gradient(circle at top,#fff3c4,#ffd966);
+}
 
+/* FLOATING DECOR */
+.floating{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+}
+.heart, .balloon{
+  position:absolute;
+  animation:floatUp 10s linear infinite;
+  opacity:.6;
+}
+.heart{color:#ff3b7a;font-size:22px;}
+.balloon{font-size:26px;}
+@keyframes floatUp{
+  from{transform:translateY(100vh);}
+  to{transform:translateY(-120vh);}
+}
+
+/* BANNERS */
+.banner{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:white;
+  padding:12px 22px;
+  border-radius:999px;
+  font-weight:800;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  z-index:5;
+}
+
+/* START CARD */
 .white-card{
   background:white;
   padding:30px;
@@ -26,14 +67,9 @@ body{
   box-shadow:0 20px 50px rgba(0,0,0,.2);
   text-align:center;
   width:320px;
+  z-index:2;
 }
-
-.button-zone{
-  position:relative;
-  height:120px;
-  margin-top:20px;
-}
-
+.button-zone{position:relative;height:120px;margin-top:20px;}
 button{
   padding:14px 24px;
   border-radius:999px;
@@ -42,32 +78,24 @@ button{
   font-weight:700;
   cursor:pointer;
 }
-
 #yesBtn{background:#ff3b7a;color:white;}
 #noBtn{background:#e5e7eb;position:absolute;}
 
-.stage{
-  width:360px;
-  position:relative;
-  text-align:center;
-}
-
+/* SLIDES */
+.stage{width:360px;z-index:2;text-align:center;}
 .photo-card{
   width:100%;
   aspect-ratio:3/4;
   perspective:1200px;
   margin:auto;
 }
-
 .inner{
   width:100%;
   height:100%;
   transition:transform .8s;
   transform-style:preserve-3d;
 }
-
 .flipped .inner{transform:rotateY(180deg);}
-
 .side{
   position:absolute;
   width:100%;
@@ -80,14 +108,12 @@ button{
   align-items:center;
   padding:18px;
 }
-
 .front img{
   width:100%;
   height:100%;
   object-fit:cover;
   border-radius:20px;
 }
-
 .back{
   background:white;
   transform:rotateY(180deg);
@@ -95,26 +121,31 @@ button{
   line-height:1.5;
 }
 
-.action{
-  position:absolute;
-  right:-90px;
-  top:40%;
-  background:none;
-  color:#ff3b7a;
-  font-size:16px;
+/* ACTION BUTTON */
+.action-btn{
+  margin-top:18px;
+  padding:12px 26px;
+  border-radius:999px;
+  font-weight:700;
 }
+.valentine-btn{background:#ff3b7a;color:white;}
+.birthday-btn{background:#ff9f1c;color:white;}
 
 .fade-left{
   animation:fadeLeft 1s forwards;
 }
-
 @keyframes fadeLeft{
   to{opacity:0;transform:translateX(-120%);}
 }
+
+.hidden{display:none;}
 </style>
 </head>
 
 <body>
+
+<div class="floating" id="decor"></div>
+<div class="banner hidden" id="banner"></div>
 
 <!-- START -->
 <div class="white-card" id="start">
@@ -133,7 +164,7 @@ button{
       <div class="side back" id="msg"></div>
     </div>
   </div>
-  <button class="action hidden" id="actionBtn">Click me 💖</button>
+  <button id="actionBtn" class="action-btn valentine-btn hidden">Click me 💖</button>
 </div>
 
 <audio id="romanticMusic" src="music/romantic.mp3" loop></audio>
@@ -145,7 +176,6 @@ const romantic=[
  {img:"photos/romantic/romantic2.jpg",msg:"I love seeing this soft, cozy side of you — it feels like home."},
  {img:"photos/romantic/romantic3.jpg",msg:"Even the simplest days feel special when I’m with you."}
 ];
-
 const birthday=[
  {img:"photos/birthday/birthday1.jpg",msg:"The woman who makes every room brighter just by being in it."},
  {img:"photos/birthday/birthday2.jpg",msg:"You carry grace, strength, and kindness so effortlessly."},
@@ -156,6 +186,10 @@ const birthday=[
 ];
 
 let phase="romantic", index=0, noCount=0;
+
+const body=document.body;
+const banner=document.getElementById("banner");
+const decor=document.getElementById("decor");
 
 const start=document.getElementById("start");
 const stage=document.getElementById("stage");
@@ -179,10 +213,38 @@ document.getElementById("zone").onmousemove=()=>{
 
 document.getElementById("yesBtn").onclick=()=>{
   start.classList.add("hidden");
+  body.classList.add("valentine");
+  banner.textContent="💕 Happy Valentine’s Day, baby 💕";
+  banner.classList.remove("hidden");
   stage.classList.remove("hidden");
   rm.play();
+  spawnHearts();
   loadSlide();
 };
+
+function spawnHearts(){
+  decor.innerHTML="";
+  for(let i=0;i<18;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="🕯️";
+    h.style.left=Math.random()*100+"%";
+    h.style.animationDuration=8+Math.random()*6+"s";
+    decor.appendChild(h);
+  }
+}
+
+function spawnBalloons(){
+  decor.innerHTML="";
+  for(let i=0;i<18;i++){
+    const b=document.createElement("div");
+    b.className="balloon";
+    b.textContent="🎈";
+    b.style.left=Math.random()*100+"%";
+    b.style.animationDuration=8+Math.random()*6+"s";
+    decor.appendChild(b);
+  }
+}
 
 function loadSlide(){
   const data=phase==="romantic"?romantic:birthday;
@@ -206,10 +268,14 @@ function loadSlide(){
             phase="birthday";
             index=0;
             rm.pause();
-            if(confirm("Okay… now it’s time to turn the energy up 🎉")){
-              bm.play();
-              loadSlide();
-            }
+            alert("Okay… now it’s time to turn the energy up 🎉");
+            body.classList.remove("valentine");
+            body.classList.add("birthday");
+            banner.textContent="🎂 Happy Birthday, baby 🎂";
+            bm.play();
+            btn.className="action-btn birthday-btn hidden";
+            spawnBalloons();
+            loadSlide();
           }else{
             alert("Happy Valentine’s Day ❤️\nAnd Happy Birthday 🎂");
           }
