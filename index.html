@@ -1,227 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>For You ❤️</title>
 
 <style>
-  body {
-    margin: 0;
-    font-family: system-ui, sans-serif;
-    background: radial-gradient(circle at top, #fff0f6, #ffd6e7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
-  }
-
-  .stage {
-    width: 90vw;
-    max-width: 420px;
-    text-align: center;
-  }
-
-  h1, h2 {
-    margin-bottom: 12px;
-  }
-
-  button {
-    padding: 14px 24px;
-    border-radius: 999px;
-    border: none;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  #yesBtn { background: #ff3b7a; color: white; }
-  #noBtn  { background: #e5e7eb; position: absolute; }
-
-  .button-zone {
-    position: relative;
-    height: 140px;
-    margin-top: 20px;
-  }
-
-  .hidden { display: none; }
-
-  /* FLIP CARD */
-  .card {
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    perspective: 1200px;
-    margin: auto;
-  }
-
-  .inner {
-    width: 100%;
-    height: 100%;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
-    position: relative;
-  }
-
-  .card.flipped .inner {
-    transform: rotateY(180deg);
-  }
-
-  .side {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,.2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-  }
-
-  .front img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 20px;
-  }
-
-  .back {
-    background: white;
-    transform: rotateY(180deg);
-    font-size: 18px;
-    line-height: 1.5;
-  }
-
-  .click {
-    margin-top: 12px;
-    background: transparent;
-    color: #ff3b7a;
-  }
-
-  .slide-out {
-    animation: slideOut 1s forwards;
-  }
-
-  @keyframes slideOut {
-    to { transform: translateX(-120%); opacity: 0; }
-  }
+body{
+  margin:0;
+  font-family:system-ui,sans-serif;
+  background:radial-gradient(circle at top,#fff0f6,#ffd6e7);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  overflow:hidden;
+}
+.hidden{display:none;}
+.stage{width:90vw;max-width:420px;text-align:center;}
+.white-card{
+  background:white;
+  padding:28px;
+  border-radius:22px;
+  box-shadow:0 18px 50px rgba(0,0,0,.15);
+}
+.button-zone{position:relative;height:140px;margin-top:20px;}
+button{
+  padding:14px 26px;
+  border-radius:999px;
+  border:none;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+}
+#yesBtn{background:#ff3b7a;color:white;}
+#noBtn{background:#e5e7eb;position:absolute;}
+.card{
+  width:100%;
+  aspect-ratio:3/4;
+  perspective:1200px;
+  margin:auto;
+}
+.inner{
+  width:100%;
+  height:100%;
+  transition:transform .8s;
+  transform-style:preserve-3d;
+  position:relative;
+}
+.card.flipped .inner{transform:rotateY(180deg);}
+.side{
+  position:absolute;
+  width:100%;
+  height:100%;
+  backface-visibility:hidden;
+  border-radius:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,.2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:16px;
+}
+.front img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:20px;
+}
+.back{
+  background:white;
+  transform:rotateY(180deg);
+  font-size:18px;
+  line-height:1.5;
+}
+#clickBtn{
+  margin-top:14px;
+  background:none;
+  color:#ff3b7a;
+  z-index:10;
+}
+.slide-out{
+  animation:slideOut 1s forwards;
+}
+@keyframes slideOut{
+  to{transform:translateX(-120%);opacity:0;}
+}
 </style>
 </head>
 
 <body>
 
+<!-- START -->
 <div class="stage" id="start">
-  <h1>Baby, will you be my Valentine? 💕</h1>
-
-  <div class="button-zone" id="zone">
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
+  <div class="white-card">
+    <h1>Baby, will you be my Valentine? 💕</h1>
+    <div class="button-zone" id="zone">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
+    <p style="opacity:.7">(No is feeling shy 😈)</p>
   </div>
-
-  <p style="opacity:.7">(No is feeling shy 😈)</p>
 </div>
 
-<div class="stage hidden" id="slideshow">
-  <h2 id="phaseTitle"></h2>
-
+<!-- SLIDESHOW -->
+<div class="stage hidden" id="show">
+  <h2 id="title"></h2>
   <div class="card" id="card">
     <div class="inner">
-      <div class="side front">
-        <img id="photo" />
-      </div>
-      <div class="side back" id="message"></div>
+      <div class="side front"><img id="photo"></div>
+      <div class="side back" id="msg"></div>
     </div>
   </div>
+  <button id="clickBtn" class="hidden">Click me 💖</button>
+</div>
 
-  <button class="click" id="flipBtn">Click me 💖</button>
+<!-- TRANSITION -->
+<div class="stage hidden" id="transition">
+  <div class="white-card">
+    <h2>Okay… now it’s time to turn the energy up 🎉</h2>
+  </div>
 </div>
 
 <audio id="romanticMusic" src="music/romantic.mp3" loop></audio>
 <audio id="birthdayMusic" src="music/birthday.mp3"></audio>
 
 <script>
-const romantic = [
-  { img: "photos/romantic/romantic1.jpg", msg: "My favorite place has always been right next to you." },
-  { img: "photos/romantic/romantic2.jpg", msg: "I love seeing this soft, cozy side of you — it feels like home." },
-  { img: "photos/romantic/romantic3.jpg", msg: "Even the simplest days feel special when I’m with you." }
+const romantic=[
+ {img:"photos/romantic/romantic1.jpg",msg:"My favorite place has always been right next to you."},
+ {img:"photos/romantic/romantic2.jpg",msg:"I love seeing this soft, cozy side of you — it feels like home."},
+ {img:"photos/romantic/romantic3.jpg",msg:"Even the simplest days feel special when I’m with you."}
+];
+const birthday=[
+ {img:"photos/birthday/birthday1.jpg",msg:"The woman who makes every room brighter just by being in it."},
+ {img:"photos/birthday/birthday2.jpg",msg:"You carry grace, strength, and kindness so effortlessly."},
+ {img:"photos/birthday/birthday3.jpg",msg:"I love how comfortable and real you are — always."},
+ {img:"photos/birthday/birthday4.jpg",msg:"Cute, mischievous, and impossible to ignore 😌"},
+ {img:"photos/birthday/birthday5.jpg",msg:"You make even the silliest moments unforgettable."},
+ {img:"photos/birthday/birthday6.jpg",msg:"Growing older with you sounds like my favorite plan."}
 ];
 
-const birthday = [
-  { img: "photos/birthday/birthday1.jpg", msg: "The woman who makes every room brighter just by being in it." },
-  { img: "photos/birthday/birthday2.jpg", msg: "You carry grace, strength, and kindness so effortlessly." },
-  { img: "photos/birthday/birthday3.jpg", msg: "I love how comfortable and real you are — always." },
-  { img: "photos/birthday/birthday4.jpg", msg: "Cute, mischievous, and impossible to ignore 😌" },
-  { img: "photos/birthday/birthday5.jpg", msg: "You make even the silliest moments unforgettable." },
-  { img: "photos/birthday/birthday6.jpg", msg: "Growing older with you sounds like my favorite plan." }
-];
+let phase="romantic",i=0,noCount=0,alerted=false;
 
-let phase = "romantic";
-let index = 0;
+const start=document.getElementById("start"),
+show=document.getElementById("show"),
+card=document.getElementById("card"),
+photo=document.getElementById("photo"),
+msg=document.getElementById("msg"),
+clickBtn=document.getElementById("clickBtn"),
+title=document.getElementById("title"),
+transition=document.getElementById("transition");
 
-const start = document.getElementById("start");
-const slideshow = document.getElementById("slideshow");
-const photo = document.getElementById("photo");
-const message = document.getElementById("message");
-const card = document.getElementById("card");
-const flipBtn = document.getElementById("flipBtn");
-const title = document.getElementById("phaseTitle");
+const rm=document.getElementById("romanticMusic"),
+bm=document.getElementById("birthdayMusic");
 
-const romanticMusic = document.getElementById("romanticMusic");
-const birthdayMusic = document.getElementById("birthdayMusic");
+document.getElementById("zone").onmousemove=()=>{
+  const no=document.getElementById("noBtn");
+  no.style.left=Math.random()*200+"px";
+  no.style.top=Math.random()*80+"px";
+  noCount++;
+  if(noCount>=3 && !alerted){
+    alerted=true;
+    alert("Haha 😌 there’s no escape from me.\nAll you can do now is press YES 💕");
+  }
+};
 
-document.getElementById("yesBtn").onclick = () => {
+document.getElementById("yesBtn").onclick=()=>{
   start.classList.add("hidden");
-  slideshow.classList.remove("hidden");
-  romanticMusic.play();
+  show.classList.remove("hidden");
+  rm.play();
   loadSlide();
 };
 
-document.getElementById("zone").onmousemove = e => {
-  const no = document.getElementById("noBtn");
-  no.style.left = Math.random()*200 + "px";
-  no.style.top = Math.random()*80 + "px";
-};
+function loadSlide(){
+  const data=phase==="romantic"?romantic:birthday;
+  title.textContent=phase==="romantic"?"Us 🤍":"It’s Your Birthday 🎂";
+  card.className="card";
+  photo.src=data[i].img;
+  msg.textContent=data[i].msg;
+  clickBtn.classList.add("hidden");
 
-flipBtn.onclick = () => {
-  card.classList.add("flipped");
-};
+  setTimeout(()=>clickBtn.classList.remove("hidden"),2500);
 
-function loadSlide() {
-  const data = phase === "romantic" ? romantic : birthday;
-  title.textContent = phase === "romantic" ? "Us 🤍" : "It’s Your Birthday 🎂";
-
-  photo.src = data[index].img;
-  message.textContent = data[index].msg;
-  card.classList.remove("flipped");
-  card.classList.remove("slide-out");
-
-  setTimeout(() => {
+  clickBtn.onclick=()=>{
     card.classList.add("flipped");
-
-    setTimeout(() => {
+    clickBtn.classList.add("hidden");
+    setTimeout(()=>{
       card.classList.remove("flipped");
       card.classList.add("slide-out");
+      setTimeout(nextSlide,1000);
+    },4000);
+  };
+}
 
-      setTimeout(() => {
-        index++;
-        if (index >= data.length) {
-          if (phase === "romantic") {
-            phase = "birthday";
-            index = 0;
-            romanticMusic.pause();
-            birthdayMusic.play();
-          } else {
-            title.innerHTML = "Happy Valentine’s Day ❤️<br>and Happy Birthday 🎂";
-            flipBtn.style.display = "none";
-            return;
-          }
-        }
+function nextSlide(){
+  i++;
+  const data=phase==="romantic"?romantic:birthday;
+  if(i>=data.length){
+    if(phase==="romantic"){
+      phase="birthday"; i=0;
+      rm.pause();
+      transition.classList.remove("hidden");
+      setTimeout(()=>{
+        transition.classList.add("hidden");
+        bm.play();
         loadSlide();
-      }, 1000);
-    }, 4000);
-  }, 500);
+      },2500);
+      return;
+    }else{
+      title.innerHTML="Happy Valentine’s Day ❤️<br>and Happy Birthday 🎂";
+      clickBtn.style.display="none";
+      return;
+    }
+  }
+  loadSlide();
 }
 </script>
 
