@@ -18,8 +18,8 @@ body{
 
 /* THEMES */
 body.start{background:#ffeef4;}
-body.valentine{background:linear-gradient(#ffd6e5,#ffb3c6);}
-body.birthday{background:linear-gradient(#fff1b8,#ffd166);}
+body.valentine{background:linear-gradient(#ffd1dc,#ff9eb8);}
+body.birthday{background:linear-gradient(#fff0b3,#ffd166);}
 
 .hidden{display:none;}
 .center{width:420px;text-align:center;z-index:2;}
@@ -46,7 +46,7 @@ button{
 /* BANNER */
 .banner{
   position:fixed;
-  top:20px;
+  top:18px;
   left:50%;
   transform:translateX(-50%);
   background:white;
@@ -57,22 +57,33 @@ button{
   z-index:3;
 }
 
-/* FLOATING */
+/* FLOATING ELEMENTS */
 .float{
   position:fixed;
-  bottom:-40px;
+  bottom:-60px;
   animation:floatUp linear infinite;
-  opacity:.7;
+  opacity:.25;
   pointer-events:none;
+  font-size:40px;
 }
 @keyframes floatUp{
-  to{transform:translateY(-120vh);}
+  to{transform:translateY(-130vh);}
+}
+
+.confetti{
+  position:fixed;
+  top:-40px;
+  animation:fall linear infinite;
+  font-size:26px;
+}
+@keyframes fall{
+  to{transform:translateY(120vh);}
 }
 
 /* SLIDE LAYOUT */
 .slide-wrap{
   display:flex;
-  gap:20px;
+  gap:24px;
   align-items:center;
   justify-content:center;
 }
@@ -115,10 +126,8 @@ button{
   line-height:1.5;
 }
 
-/* ACTION BUTTON */
-.action-side{
-  min-width:120px;
-}
+/* ACTION */
+.action-side{min-width:140px;}
 .val-btn{background:#ff3b7a;color:white;}
 .bd-btn{background:#ff9f1c;color:white;}
 
@@ -134,7 +143,7 @@ button{
 <body class="start">
 
 <div id="banner" class="banner hidden"></div>
-<div id="floats"></div>
+<div id="fx"></div>
 
 <!-- START -->
 <div class="center box" id="start">
@@ -156,7 +165,7 @@ button{
     </div>
 
     <div class="action-side">
-      <button id="actionBtn" class="val-btn">Click me 💖</button>
+      <button id="actionBtn" class="val-btn hidden">Click me 💖</button>
     </div>
   </div>
 </div>
@@ -176,7 +185,6 @@ const romantic=[
  ["photos/romantic/romantic2.jpg","I love this soft, cozy side of you."],
  ["photos/romantic/romantic3.jpg","Even simple days feel special with you."]
 ];
-
 const birthday=[
  ["photos/birthday/birthday1.jpg","The woman who lights up every room."],
  ["photos/birthday/birthday2.jpg","Grace and beauty, always."],
@@ -190,7 +198,7 @@ let set=romantic, index=0, noCount=0;
 
 const body=document.body;
 const banner=document.getElementById("banner");
-const floats=document.getElementById("floats");
+const fx=document.getElementById("fx");
 
 const start=document.getElementById("start");
 const slide=document.getElementById("slide");
@@ -219,32 +227,33 @@ yes.onclick=()=>{
   body.className="valentine";
   banner.textContent="💕 Happy Valentine’s Day, baby 💕";
   banner.classList.remove("hidden");
-  spawn("🕯️");
+  spawnRomanticFX();
   slide.classList.remove("hidden");
   romanticMusic.play();
   loadSlide();
 };
 
-function spawn(emoji){
-  floats.innerHTML="";
-  for(let i=0;i<18;i++){
+function spawnRomanticFX(){
+  fx.innerHTML="";
+  for(let i=0;i<14;i++){
     const e=document.createElement("div");
     e.className="float";
-    e.textContent=emoji;
+    e.textContent="❤️";
     e.style.left=Math.random()*100+"%";
-    e.style.animationDuration=8+Math.random()*6+"s";
-    floats.appendChild(e);
+    e.style.animationDuration=10+Math.random()*8+"s";
+    fx.appendChild(e);
   }
 }
 
+/* SLIDES */
 function loadSlide(){
   card.className="card";
   img.src=set[index][0];
   msg.textContent=set[index][1];
-  btn.disabled=false;
+  btn.classList.remove("hidden");
 
   btn.onclick=()=>{
-    btn.disabled=true;
+    btn.classList.add("hidden");
     card.classList.add("flip");
 
     setTimeout(()=>{
@@ -271,11 +280,12 @@ function nextSlide(){
   loadSlide();
 }
 
+/* BIRTHDAY */
 goBirthday.onclick=()=>{
   transition.classList.add("hidden");
   body.className="birthday";
   banner.textContent="🎂 Happy Birthday, baby 🎂";
-  spawn("🎈");
+  spawnBirthdayFX();
   romanticMusic.pause();
   birthdayMusic.play();
   btn.className="bd-btn";
@@ -284,6 +294,18 @@ goBirthday.onclick=()=>{
   slide.classList.remove("hidden");
   loadSlide();
 };
+
+function spawnBirthdayFX(){
+  fx.innerHTML="";
+  for(let i=0;i<20;i++){
+    const e=document.createElement("div");
+    e.className="confetti";
+    e.textContent=["🎉","🎂","💥","🎈"][Math.floor(Math.random()*4)];
+    e.style.left=Math.random()*100+"%";
+    e.style.animationDuration=6+Math.random()*6+"s";
+    fx.appendChild(e);
+  }
+}
 </script>
 
 </body>
