@@ -21,9 +21,8 @@ body.start{background:#ffeef4;}
 body.valentine{background:linear-gradient(#ffd6e5,#ffb3c6);}
 body.birthday{background:linear-gradient(#fff1b8,#ffd166);}
 
-/* COMMON */
 .hidden{display:none;}
-.center{width:380px;text-align:center;z-index:2;}
+.center{width:420px;text-align:center;z-index:2;}
 .box{
   background:white;
   padding:28px;
@@ -42,7 +41,6 @@ button{
 
 #yes{background:#ff3b7a;color:white;}
 #no{background:#eee;position:absolute;}
-
 .zone{position:relative;height:130px;margin-top:20px;}
 
 /* BANNER */
@@ -71,12 +69,19 @@ button{
   to{transform:translateY(-120vh);}
 }
 
+/* SLIDE LAYOUT */
+.slide-wrap{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  justify-content:center;
+}
+
 /* CARD */
 .card{
-  width:100%;
+  width:260px;
   aspect-ratio:3/4;
   perspective:1200px;
-  margin:auto;
 }
 .inner{
   width:100%;
@@ -111,7 +116,9 @@ button{
 }
 
 /* ACTION BUTTON */
-.action{margin-top:18px;}
+.action-side{
+  min-width:120px;
+}
 .val-btn{background:#ff3b7a;color:white;}
 .bd-btn{background:#ff9f1c;color:white;}
 
@@ -140,14 +147,17 @@ button{
 
 <!-- SLIDE -->
 <div class="center hidden" id="slide">
-  <div class="card" id="card">
-    <div class="inner">
-      <div class="face front"><img id="img"></div>
-      <div class="face back" id="msg"></div>
+  <div class="slide-wrap">
+    <div class="card" id="card">
+      <div class="inner">
+        <div class="face front"><img id="img"></div>
+        <div class="face back" id="msg"></div>
+      </div>
     </div>
-  </div>
-  <div class="action">
-    <button id="actionBtn" class="val-btn">Click me 💖</button>
+
+    <div class="action-side">
+      <button id="actionBtn" class="val-btn">Click me 💖</button>
+    </div>
   </div>
 </div>
 
@@ -166,6 +176,7 @@ const romantic=[
  ["photos/romantic/romantic2.jpg","I love this soft, cozy side of you."],
  ["photos/romantic/romantic3.jpg","Even simple days feel special with you."]
 ];
+
 const birthday=[
  ["photos/birthday/birthday1.jpg","The woman who lights up every room."],
  ["photos/birthday/birthday2.jpg","Grace and beauty, always."],
@@ -175,7 +186,7 @@ const birthday=[
  ["photos/birthday/birthday6.jpg","My favorite future."]
 ];
 
-let set=romantic, i=0, noCount=0;
+let set=romantic, index=0, noCount=0;
 
 const body=document.body;
 const banner=document.getElementById("banner");
@@ -197,7 +208,9 @@ zone.onmousemove=()=>{
   n.style.left=Math.random()*180+"px";
   n.style.top=Math.random()*80+"px";
   noCount++;
-  if(noCount===4) alert("Haha 😌 there’s no escape from me.\nYou HAVE to press YES 💕");
+  if(noCount===4){
+    alert("Haha 😌 there’s no escape from me.\nYou HAVE to press YES 💕");
+  }
 };
 
 /* YES */
@@ -209,7 +222,7 @@ yes.onclick=()=>{
   spawn("🕯️");
   slide.classList.remove("hidden");
   romanticMusic.play();
-  load();
+  loadSlide();
 };
 
 function spawn(emoji){
@@ -224,24 +237,28 @@ function spawn(emoji){
   }
 }
 
-function load(){
+function loadSlide(){
   card.className="card";
-  img.src=set[i][0];
-  msg.textContent=set[i][1];
+  img.src=set[index][0];
+  msg.textContent=set[index][1];
+  btn.disabled=false;
 
   btn.onclick=()=>{
+    btn.disabled=true;
     card.classList.add("flip");
+
     setTimeout(()=>{
       card.classList.remove("flip");
       card.classList.add("fade-left");
-      setTimeout(next,1000);
+
+      setTimeout(nextSlide,1000);
     },6000);
   };
 }
 
-function next(){
-  i++;
-  if(i>=set.length){
+function nextSlide(){
+  index++;
+  if(index>=set.length){
     if(set===romantic){
       slide.classList.add("hidden");
       transition.classList.remove("hidden");
@@ -251,7 +268,7 @@ function next(){
       return;
     }
   }
-  load();
+  loadSlide();
 }
 
 goBirthday.onclick=()=>{
@@ -263,9 +280,9 @@ goBirthday.onclick=()=>{
   birthdayMusic.play();
   btn.className="bd-btn";
   set=birthday;
-  i=0;
+  index=0;
   slide.classList.remove("hidden");
-  load();
+  loadSlide();
 };
 </script>
 
