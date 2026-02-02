@@ -8,7 +8,7 @@
 <style>
 body{
   margin:0;
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
   background:#ffeef4;
   display:flex;
   justify-content:center;
@@ -114,18 +114,21 @@ button{
   text-align:center;
 }
 
-/* END */
+/* END (FIXED) */
 #end{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.7);
+  background:rgba(0,0,0,.75);
   color:white;
-  display:flex;
+  display:none;          /* ✅ KEY FIX */
   justify-content:center;
   align-items:center;
   text-align:center;
   font-size:38px;
   font-weight:bold;
+}
+#end.show{
+  display:flex;
 }
 </style>
 </head>
@@ -163,7 +166,7 @@ button{
 </div>
 
 <!-- END -->
-<div id="end" class="hidden">
+<div id="end">
   Happy Valentine’s Day ❤️<br>
   & Happy Birthday 🎂<br>
   Baby
@@ -263,7 +266,7 @@ function loadSlide(){
           });
         }else{
           bm.pause();
-          end.classList.remove("hidden");
+          end.classList.add("show");   // ✅ only here
         }
       }else{
         inner.className="inner";
