@@ -21,21 +21,20 @@ body.start{background:#ffeef4;}
 body.valentine{background:radial-gradient(circle at top,#ffd1dc,#ff8fab);}
 body.birthday{background:linear-gradient(#fff0b3,#ffd166);}
 
-/* COMMON */
 .hidden{display:none;}
-.center{width:560px;text-align:center;z-index:3;}
+.center{width:900px;text-align:center;z-index:3;}
 .box{
   background:white;
-  padding:28px;
-  border-radius:22px;
-  box-shadow:0 25px 60px rgba(0,0,0,.25);
+  padding:32px;
+  border-radius:26px;
+  box-shadow:0 30px 70px rgba(0,0,0,.3);
 }
 
 button{
-  padding:14px 26px;
+  padding:16px 30px;
   border-radius:999px;
   border:none;
-  font-size:16px;
+  font-size:18px;
   font-weight:700;
   cursor:pointer;
 }
@@ -52,96 +51,31 @@ button{
   left:50%;
   transform:translateX(-50%);
   background:white;
-  padding:12px 28px;
+  padding:14px 30px;
   border-radius:999px;
   font-weight:800;
-  box-shadow:0 12px 28px rgba(0,0,0,.25);
+  box-shadow:0 14px 32px rgba(0,0,0,.3);
   z-index:4;
-}
-
-/* FX LAYER */
-.fx{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:1;
-}
-
-/* ROMANTIC FX */
-.heart{
-  position:absolute;
-  bottom:-80px;
-  font-size:64px;
-  opacity:.25;
-  animation:floatUp linear infinite;
-}
-.tulip{
-  position:absolute;
-  bottom:-60px;
-  font-size:46px;
-  opacity:.3;
-  animation:bloom 10s ease-in-out infinite;
-}
-
-@keyframes floatUp{
-  to{transform:translateY(-130vh);}
-}
-@keyframes bloom{
-  0%{transform:scale(.2) translateY(0);opacity:0;}
-  30%{opacity:.35;}
-  60%{transform:scale(1) translateY(-60vh);opacity:.3;}
-  100%{opacity:0;}
-}
-
-/* BIRTHDAY FX */
-.confetti{
-  position:absolute;
-  top:-40px;
-  font-size:26px;
-  animation:fall linear infinite;
-}
-.rocket{
-  position:absolute;
-  bottom:-40px;
-  font-size:30px;
-  animation:launch 3s linear infinite;
-}
-.burst{
-  position:absolute;
-  font-size:40px;
-  animation:burst 2s ease-out infinite;
-}
-
-@keyframes fall{
-  to{transform:translateY(120vh);}
-}
-@keyframes launch{
-  to{transform:translateY(-120vh);}
-}
-@keyframes burst{
-  0%{opacity:0;transform:scale(.3);}
-  40%{opacity:1;}
-  100%{opacity:0;transform:scale(1.4);}
 }
 
 /* SLIDE LAYOUT */
 .slide-wrap{
   display:flex;
-  gap:40px;
+  gap:60px;
   align-items:center;
   justify-content:center;
 }
 
-/* CARD – EXTRA LARGE */
+/* CARD – EXTRA EXTRA LARGE */
 .card{
-  width:420px;             /* 🔥 EXTRA LARGE */
+  width:720px;              /* 🔥 ~2× previous */
   aspect-ratio:3/4;
-  perspective:1400px;
+  perspective:1600px;
 }
 .inner{
   width:100%;
   height:100%;
-  transition:transform .8s;
+  transition:transform .9s;
   transform-style:preserve-3d;
 }
 .flip .inner{transform:rotateY(180deg);}
@@ -150,37 +84,61 @@ button{
   width:100%;
   height:100%;
   backface-visibility:hidden;
-  border-radius:24px;
-  box-shadow:0 22px 55px rgba(0,0,0,.35);
+  border-radius:30px;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:22px;
+  padding:28px;
 }
 .front img{
   width:100%;
   height:100%;
   object-fit:cover;
-  border-radius:24px;
+  border-radius:30px;
 }
 .back{
   background:white;
   transform:rotateY(180deg);
-  font-size:20px;
+  font-size:24px;
   line-height:1.6;
 }
 
 /* ACTION – SAME DISTANCE */
 .action-side{
-  min-width:280px;     /* unchanged */
+  min-width:280px;
   display:flex;
   align-items:center;
 }
-#actionBtn{
-  margin-left:40px;
-}
+#actionBtn{margin-left:40px;}
 .val-btn{background:#ff3b7a;color:white;}
 .bd-btn{background:#ff9f1c;color:white;}
+
+/* CONTRACT */
+.contract{
+  background:white;
+  padding:40px;
+  border-radius:28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
+}
+.sign-box{
+  border:2px dashed #ccc;
+  padding:20px;
+  border-radius:16px;
+  margin:20px auto;
+  cursor:pointer;
+}
+
+/* COUNTDOWN */
+.count{
+  font-size:80px;
+  font-weight:900;
+  animation:fade 1s ease-in-out;
+}
+@keyframes fade{
+  from{opacity:0;}
+  to{opacity:1;}
+}
 
 /* TRANSITION */
 .fade-left{
@@ -195,7 +153,6 @@ button{
 <body class="start">
 
 <div id="banner" class="banner hidden"></div>
-<div id="fx" class="fx"></div>
 
 <!-- START -->
 <div class="center box" id="start">
@@ -221,6 +178,23 @@ button{
   </div>
 </div>
 
+<!-- CONTRACT -->
+<div class="center hidden" id="contract">
+  <div class="contract">
+    <h2>💖 Love Contract 💖</h2>
+    <p>This certifies that we officially choose each other.</p>
+    <p><strong>Signed by me:</strong> Dikshant ✍️</p>
+    <div class="sign-box" id="signBox">
+      Tap here to sign ✋
+    </div>
+  </div>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="center hidden" id="countdown">
+  <div id="countNum" class="count"></div>
+</div>
+
 <audio id="romantic" src="music/romantic.mp3" loop></audio>
 <audio id="birthday" src="music/birthday.mp3"></audio>
 
@@ -241,11 +215,11 @@ const birthday=[
 
 let set=romantic, i=0, noCount=0;
 
-const body=document.body;
-const banner=document.getElementById("banner");
-const fx=document.getElementById("fx");
 const start=document.getElementById("start");
 const slide=document.getElementById("slide");
+const contract=document.getElementById("contract");
+const countdown=document.getElementById("countdown");
+const countNum=document.getElementById("countNum");
 const card=document.getElementById("card");
 const img=document.getElementById("img");
 const msg=document.getElementById("msg");
@@ -254,10 +228,10 @@ const btn=document.getElementById("actionBtn");
 const romanticMusic=document.getElementById("romantic");
 const birthdayMusic=document.getElementById("birthday");
 
-/* NO BUTTON */
+/* NO */
 zone.onmousemove=()=>{
   const n=document.getElementById("no");
-  n.style.left=Math.random()*180+"px";
+  n.style.left=Math.random()*200+"px";
   n.style.top=Math.random()*80+"px";
   if(++noCount===4){
     alert("Haha 😌 there’s no escape from me.\nYou HAVE to press YES 💕");
@@ -267,61 +241,11 @@ zone.onmousemove=()=>{
 /* YES */
 yes.onclick=()=>{
   start.classList.add("hidden");
-  body.className="valentine";
-  banner.textContent="💕 Happy Valentine’s Day, baby 💕";
-  banner.classList.remove("hidden");
-  spawnRomanticFX();
+  document.body.className="valentine";
   romanticMusic.play();
   slide.classList.remove("hidden");
   loadSlide();
 };
-
-/* ROMANTIC FX */
-function spawnRomanticFX(){
-  fx.innerHTML="";
-  for(let i=0;i<10;i++){
-    const h=document.createElement("div");
-    h.className="heart";
-    h.textContent="❤️";
-    h.style.left=Math.random()*100+"%";
-    h.style.animationDuration=14+Math.random()*10+"s";
-    fx.appendChild(h);
-  }
-  for(let i=0;i<6;i++){
-    const t=document.createElement("div");
-    t.className="tulip";
-    t.textContent="🌷";
-    t.style.left=Math.random()*100+"%";
-    fx.appendChild(t);
-  }
-}
-
-function spawnBirthdayFX(){
-  fx.innerHTML="";
-  for(let i=0;i<18;i++){
-    const c=document.createElement("div");
-    c.className="confetti";
-    c.textContent=["🎉","🎂","🎈"][Math.floor(Math.random()*3)];
-    c.style.left=Math.random()*100+"%";
-    c.style.animationDuration=5+Math.random()*5+"s";
-    fx.appendChild(c);
-  }
-  for(let i=0;i<6;i++){
-    const r=document.createElement("div");
-    r.className="rocket";
-    r.textContent="🚀";
-    r.style.left=Math.random()*100+"%";
-    fx.appendChild(r);
-  }
-  for(let i=0;i<4;i++){
-    const b=document.createElement("div");
-    b.className="burst";
-    b.textContent="💥";
-    b.style.left=Math.random()*100+"%";
-    b.style.top=Math.random()*50+"%";
-    fx.appendChild(b);
-  }
-}
 
 function loadSlide(){
   card.className="card";
@@ -343,21 +267,43 @@ function loadSlide(){
 function nextSlide(){
   i++;
   if(i>=set.length){
-    if(set===romantic){
-      set=birthday;
-      i=0;
-      romanticMusic.pause();
-      birthdayMusic.play();
-      body.className="birthday";
-      banner.textContent="🎂 Happy Birthday, baby 🎂";
-      spawnBirthdayFX();
-      loadSlide();
-      return;
-    }else{
-      alert("Happy Valentine’s Day ❤️\nHappy Birthday 🎂");
-      return;
-    }
+    slide.classList.add("hidden");
+    contract.classList.remove("hidden");
+    return;
   }
+  loadSlide();
+}
+
+/* CONTRACT SIGN */
+signBox.onclick=()=>{
+  signBox.textContent="Thank you 😌 Haha now you are mine!! ❤️";
+  setTimeout(startCountdown,1500);
+};
+
+function startCountdown(){
+  contract.classList.add("hidden");
+  countdown.classList.remove("hidden");
+  let c=3;
+  countNum.textContent=c;
+  const t=setInterval(()=>{
+    c--;
+    if(c>0){
+      countNum.textContent=c;
+    }else{
+      clearInterval(t);
+      countdown.classList.add("hidden");
+      launchBirthday();
+    }
+  },1000);
+}
+
+function launchBirthday(){
+  document.body.className="birthday";
+  romanticMusic.pause();
+  birthdayMusic.play();
+  set=birthday;
+  i=0;
+  slide.classList.remove("hidden");
   loadSlide();
 }
 </script>
