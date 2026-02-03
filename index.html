@@ -5,6 +5,7 @@
 <title>For You ❤️</title>
 
 <style>
+/* ---------- BASE ---------- */
 body{
   margin:0;
   font-family:system-ui, sans-serif;
@@ -13,7 +14,7 @@ body{
   justify-content:center;
   align-items:center;
   overflow:hidden;
-  transition:background 1s;
+  transition:background 3s ease;
 }
 
 body.start{background:#ffeef4;}
@@ -30,19 +31,7 @@ body.birthday{background:linear-gradient(#fff0b3,#ffd166);}
   box-shadow:0 30px 70px rgba(0,0,0,.3);
 }
 
-button{
-  padding:16px 30px;
-  border-radius:999px;
-  border:none;
-  font-size:18px;
-  font-weight:700;
-  cursor:pointer;
-}
-
-#yes{background:#ff3b7a;color:white;}
-#no{background:#eee;position:absolute;}
-.zone{position:relative;height:130px;margin-top:20px;}
-
+/* ---------- BANNER ---------- */
 .banner{
   position:fixed;
   top:18px;
@@ -56,12 +45,13 @@ button{
   z-index:4;
 }
 
-/* FX LAYER */
+/* ---------- FX LAYER ---------- */
 .fx{
   position:fixed;
   inset:0;
   pointer-events:none;
   z-index:1;
+  transition:opacity 3s ease;
 }
 
 /* ROMANTIC FX */
@@ -80,9 +70,7 @@ button{
   animation:bloom 14s ease-in-out infinite;
 }
 
-@keyframes floatUp{
-  to{transform:translateY(-140vh);}
-}
+@keyframes floatUp{to{transform:translateY(-140vh);}}
 @keyframes bloom{
   0%{transform:scale(.3);opacity:0;}
   40%{opacity:.4;}
@@ -91,55 +79,41 @@ button{
 }
 
 /* BIRTHDAY FX */
-.confetti{
-  position:absolute;
-  top:-80px;
-  font-size:60px;
-  animation:fall linear infinite;
-}
-.rocket{
-  position:absolute;
-  bottom:-100px;
-  font-size:70px;
-  animation:launch 4s linear infinite;
-}
-.burst{
-  position:absolute;
-  font-size:90px;
-  animation:burst 2.5s ease-out infinite;
-}
+.confetti{position:absolute;top:-80px;font-size:60px;animation:fall linear infinite;}
+.rocket{position:absolute;bottom:-100px;font-size:70px;animation:launch 4s linear infinite;}
+.burst{position:absolute;font-size:90px;animation:burst 2.5s ease-out infinite;}
 
-@keyframes fall{
-  to{transform:translateY(140vh);}
-}
-@keyframes launch{
-  to{transform:translateY(-140vh);}
-}
+@keyframes fall{to{transform:translateY(140vh);}}
+@keyframes launch{to{transform:translateY(-140vh);}}
 @keyframes burst{
   0%{opacity:0;transform:scale(.3);}
   40%{opacity:1;}
   100%{opacity:0;transform:scale(1.5);}
 }
 
-/* SLIDE */
-.slide-wrap{
-  display:flex;
-  gap:60px;
-  align-items:center;
-  justify-content:center;
+/* ---------- WHY I CHOOSE YOU ---------- */
+.type{
+  font-size:26px;
+  font-weight:700;
+  line-height:1.8;
+  white-space:pre-line;
+  min-height:200px;
 }
 
+/* ---------- COUNTDOWN ---------- */
+.count{
+  font-size:100px;
+  font-weight:900;
+}
+
+/* ---------- CARD ---------- */
+.slide-wrap{display:flex;gap:60px;align-items:center;justify-content:center;}
 .card{
   width:720px;
   aspect-ratio:3/4;
   perspective:1600px;
 }
-.inner{
-  width:100%;
-  height:100%;
-  transition:transform .9s;
-  transform-style:preserve-3d;
-}
+.inner{width:100%;height:100%;transition:transform .9s;transform-style:preserve-3d;}
 .flip .inner{transform:rotateY(180deg);}
 .face{
   position:absolute;
@@ -153,61 +127,16 @@ button{
   align-items:center;
   padding:28px;
 }
-.front img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  border-radius:30px;
-}
-.back{
-  background:white;
-  transform:rotateY(180deg);
-  font-size:24px;
-  line-height:1.6;
-}
+.front img{width:100%;height:100%;object-fit:cover;border-radius:30px;}
+.back{background:white;transform:rotateY(180deg);font-size:24px;}
 
-.action-side{
-  min-width:280px;
-  display:flex;
-  align-items:center;
-}
+.action-side{min-width:280px;display:flex;align-items:center;}
 #actionBtn{margin-left:40px;}
 .val-btn{background:#ff3b7a;color:white;}
 .bd-btn{background:#ff9f1c;color:white;}
 
-.fade-left{
-  animation:fadeLeft 1s forwards;
-}
-@keyframes fadeLeft{
-  to{opacity:0;transform:translateX(-120%);}
-}
-
-/* CONTRACT */
-.contract{
-  background:white;
-  padding:40px;
-  border-radius:28px;
-  box-shadow:0 30px 80px rgba(0,0,0,.35);
-}
-.sign-box{
-  border:2px dashed #ccc;
-  padding:24px;
-  border-radius:16px;
-  margin:24px auto;
-  cursor:pointer;
-  font-weight:700;
-}
-
-/* COUNTDOWN */
-.count{
-  font-size:100px;
-  font-weight:900;
-  animation:fade 1s ease-in-out;
-}
-@keyframes fade{
-  from{opacity:0;}
-  to{opacity:1;}
-}
+.fade-left{animation:fadeLeft 1s forwards;}
+@keyframes fadeLeft{to{opacity:0;transform:translateX(-120%);}}
 </style>
 </head>
 
@@ -216,37 +145,21 @@ button{
 <div id="banner" class="banner hidden"></div>
 <div id="fx" class="fx"></div>
 
-<!-- START -->
-<div class="center box" id="start">
-  <h2>Will you be my Valentine? 💕</h2>
-  <div class="zone" id="zone">
-    <button id="yes">Yes</button>
-    <button id="no">No</button>
-  </div>
-</div>
-
-<!-- SLIDE -->
-<div class="center hidden" id="slide">
-  <div class="slide-wrap">
-    <div class="card" id="card">
-      <div class="inner">
-        <div class="face front"><img id="img"></div>
-        <div class="face back" id="msg"></div>
-      </div>
-    </div>
-    <div class="action-side">
-      <button id="actionBtn" class="val-btn hidden">Click me 💖</button>
-    </div>
+<!-- WHY I CHOOSE YOU -->
+<div class="center hidden" id="why">
+  <div class="box">
+    <div id="typeText" class="type"></div>
   </div>
 </div>
 
 <!-- CONTRACT -->
 <div class="center hidden" id="contract">
-  <div class="contract">
+  <div class="box">
     <h2>💖 Love Contract 💖</h2>
-    <p>This certifies that we officially choose each other.</p>
-    <p><strong>Signed by me:</strong> Dikshant ✍️</p>
-    <div class="sign-box" id="signBox">Tap here to sign ✋</div>
+    <p>Signed by me: <strong>Dikshant</strong> ✍️</p>
+    <div id="signBox" class="box" style="cursor:pointer;">
+      Tap here to sign ✋
+    </div>
   </div>
 </div>
 
@@ -259,89 +172,85 @@ button{
 <audio id="birthday" src="music/birthday.mp3"></audio>
 
 <script>
-const romantic=[
- ["photos/romantic/romantic1.jpg","My favorite place has always been right next to you."],
- ["photos/romantic/romantic2.jpg","I love this soft, cozy side of you."],
- ["photos/romantic/romantic3.jpg","Even simple days feel special with you."]
-];
-const birthday=[
- ["photos/birthday/birthday1.jpg","The woman who lights up every room."],
- ["photos/birthday/birthday2.jpg","Grace and beauty, always."],
- ["photos/birthday/birthday3.jpg","So effortlessly you."],
- ["photos/birthday/birthday4.jpg","Cute and mischievous 😌"],
- ["photos/birthday/birthday5.jpg","You make life fun."],
- ["photos/birthday/birthday6.jpg","My favorite future."]
+/* WHY I CHOOSE YOU */
+const lines=[
+ "I choose you because…",
+ "– you calm my chaos",
+ "– you make ordinary days special",
+ "– you feel like home"
 ];
 
-let set=romantic, i=0, noCount=0;
-let contractDone=false;
-
-const fx=document.getElementById("fx");
-const start=document.getElementById("start");
-const slide=document.getElementById("slide");
-const contract=document.getElementById("contract");
-const countdown=document.getElementById("countdown");
-const countNum=document.getElementById("countNum");
-const card=document.getElementById("card");
-const img=document.getElementById("img");
-const msg=document.getElementById("msg");
-const btn=document.getElementById("actionBtn");
-
-const romanticMusic=document.getElementById("romantic");
-const birthdayMusic=document.getElementById("birthday");
-
-/* NO BUTTON */
-zone.onmousemove=()=>{
-  const n=document.getElementById("no");
-  n.style.left=Math.random()*200+"px";
-  n.style.top=Math.random()*80+"px";
-  if(++noCount===4){
-    alert("Haha 😌 there’s no escape from me.\nYou HAVE to press YES 💕");
-  }
-};
-
-/* YES */
-yes.onclick=()=>{
-  start.classList.add("hidden");
-  document.body.className="valentine";
-  romanticMusic.play();
-  spawnRomanticFX();
-  slide.classList.remove("hidden");
-  loadSlide();
-};
-
-function spawnRomanticFX(){
-  fx.innerHTML="";
-  for(let i=0;i<12;i++){
-    const h=document.createElement("div");
-    h.className="heart";
-    h.textContent="❤️";
-    h.style.left=Math.random()*100+"%";
-    h.style.animationDuration=12+Math.random()*10+"s";
-    fx.appendChild(h);
-  }
-  for(let i=0;i<8;i++){
-    const t=document.createElement("div");
-    t.className="tulip";
-    t.textContent="🌷";
-    t.style.left=Math.random()*100+"%";
-    fx.appendChild(t);
-  }
+function typeLines(){
+  let i=0, j=0;
+  const el=document.getElementById("typeText");
+  const timer=setInterval(()=>{
+    el.textContent+=lines[i][j++];
+    if(j>=lines[i].length){
+      el.textContent+="\n";
+      i++; j=0;
+      if(i>=lines.length){
+        clearInterval(timer);
+        setTimeout(()=>showContract(),1500);
+      }
+    }
+  },60);
 }
 
+/* TRANSITION */
+function smoothToBirthday(){
+  document.body.className="birthday";
+  document.getElementById("fx").style.opacity=0;
+  setTimeout(()=>{
+    document.getElementById("fx").innerHTML="";
+    spawnBirthdayFX();
+    document.getElementById("fx").style.opacity=1;
+    document.getElementById("birthday").play();
+  },3000);
+}
+
+/* SIGN */
+function showContract(){
+  document.getElementById("why").classList.add("hidden");
+  document.getElementById("contract").classList.remove("hidden");
+}
+
+signBox.onclick=()=>{
+  signBox.textContent="Thank you 😌 haha now you are mine!! ❤️";
+  setTimeout(()=>{
+    document.getElementById("contract").classList.add("hidden");
+    startCountdown();
+  },1500);
+}
+
+function startCountdown(){
+  const cd=document.getElementById("countdown");
+  const n=document.getElementById("countNum");
+  cd.classList.remove("hidden");
+  let c=3;
+  n.textContent=c;
+  const t=setInterval(()=>{
+    c--;
+    if(c>0){n.textContent=c;}
+    else{
+      clearInterval(t);
+      cd.classList.add("hidden");
+      smoothToBirthday();
+    }
+  },1000);
+}
+
+/* BIRTHDAY FX */
 function spawnBirthdayFX(){
-  fx.innerHTML="";
+  const fx=document.getElementById("fx");
   for(let i=0;i<10;i++){
     const r=document.createElement("div");
-    r.className="rocket";
-    r.textContent="🚀";
+    r.className="rocket"; r.textContent="🚀";
     r.style.left=Math.random()*100+"%";
     fx.appendChild(r);
   }
   for(let i=0;i<6;i++){
     const b=document.createElement("div");
-    b.className="burst";
-    b.textContent="💥";
+    b.className="burst"; b.textContent="💥";
     b.style.left=Math.random()*100+"%";
     b.style.top=Math.random()*50+"%";
     fx.appendChild(b);
@@ -351,79 +260,38 @@ function spawnBirthdayFX(){
     c.className="confetti";
     c.textContent=["🎉","🎂","🎈"][Math.floor(Math.random()*3)];
     c.style.left=Math.random()*100+"%";
-    c.style.animationDuration=5+Math.random()*5+"s";
     fx.appendChild(c);
   }
 }
 
-function loadSlide(){
-  card.className="card";
-  img.src=set[i][0];
-  msg.textContent=set[i][1];
-  btn.classList.remove("hidden");
-
-  btn.onclick=()=>{
-    btn.classList.add("hidden");
-    card.classList.add("flip");
-    setTimeout(()=>{
-      card.classList.remove("flip");
-      card.classList.add("fade-left");
-      setTimeout(nextSlide,1000);
-    },6000);
-  };
-}
-
-function nextSlide(){
-  i++;
-  if(i>=set.length){
-    slide.classList.add("hidden");
-    if(set===romantic && !contractDone){
-      contract.classList.remove("hidden");
-      return;
-    }
-    endSequence();
-    return;
-  }
-  loadSlide();
-}
-
-/* CONTRACT */
-signBox.onclick=()=>{
-  signBox.textContent="Thank you 😌 Haha now you are mine!! ❤️";
-  contractDone=true;
-  setTimeout(startCountdown,1500);
+/* ENTRY */
+window.onload=()=>{
+  document.body.className="valentine";
+  document.getElementById("romantic").play();
+  spawnRomanticFX();
+  setTimeout(()=>{
+    document.getElementById("why").classList.remove("hidden");
+    typeLines();
+  },1000);
 };
 
-function startCountdown(){
-  contract.classList.add("hidden");
-  countdown.classList.remove("hidden");
-  let c=3;
-  countNum.textContent=c;
-  const t=setInterval(()=>{
-    c--;
-    if(c>0){
-      countNum.textContent=c;
-    }else{
-      clearInterval(t);
-      countdown.classList.add("hidden");
-      launchBirthday();
-    }
-  },1000);
-}
-
-function launchBirthday(){
-  document.body.className="birthday";
-  romanticMusic.pause();
-  birthdayMusic.play();
-  spawnBirthdayFX();
-  set=birthday;
-  i=0;
-  slide.classList.remove("hidden");
-  loadSlide();
-}
-
-function endSequence(){
-  alert("Happy Valentine’s Day ❤️\nAnd Happy Birthday 🎂");
+/* ROMANTIC FX */
+function spawnRomanticFX(){
+  const fx=document.getElementById("fx");
+  fx.innerHTML="";
+  for(let i=0;i<12;i++){
+    const h=document.createElement("div");
+    h.className="heart"; h.textContent="❤️";
+    h.style.left=Math.random()*100+"%";
+    h.style.animationDuration=12+Math.random()*10+"s";
+    fx.appendChild(h);
+  }
+  for(let i=0;i<8;i++){
+    const t=document.createElement("div");
+    t.className="tulip"; t.textContent="🌷";
+    t.style.left=Math.random()*100+"%";
+    fx.appendChild(t);
+  }
 }
 </script>
 
