@@ -5,7 +5,6 @@
 <title>For You ❤️</title>
 
 <style>
-/* ===== BASE ===== */
 body{
   margin:0;
   font-family:system-ui, sans-serif;
@@ -19,22 +18,19 @@ body{
 
 /* THEMES */
 body.start{background:#ffeef4;}
-body.valentine{
-  background:radial-gradient(circle at top,#ffd1dc,#ff8fab);
-}
-body.birthday{
-  background:linear-gradient(#fff0b3,#ffd166);
-}
+body.valentine{background:radial-gradient(circle at top,#ffd1dc,#ff8fab);}
+body.birthday{background:linear-gradient(#fff0b3,#ffd166);}
 
 /* COMMON */
 .hidden{display:none;}
-.center{width:440px;text-align:center;z-index:3;}
+.center{width:480px;text-align:center;z-index:3;}
 .box{
   background:white;
   padding:28px;
   border-radius:22px;
   box-shadow:0 25px 60px rgba(0,0,0,.25);
 }
+
 button{
   padding:14px 26px;
   border-radius:999px;
@@ -63,16 +59,6 @@ button{
   z-index:4;
 }
 
-/* HEARTBEAT */
-.heartbeat{
-  animation:pulse 1.2s ease-in-out 2;
-}
-@keyframes pulse{
-  0%{transform:scale(1);}
-  50%{transform:scale(1.03);}
-  100%{transform:scale(1);}
-}
-
 /* FLOATING FX */
 .fx{
   position:fixed;
@@ -89,17 +75,6 @@ button{
 @keyframes floatUp{
   to{transform:translateY(-130vh);}
 }
-.floating-text{
-  position:fixed;
-  font-weight:800;
-  opacity:.15;
-  animation:drift 25s linear infinite;
-}
-@keyframes drift{
-  to{transform:translate(120vw,-120vh);}
-}
-
-/* CONFETTI */
 .confetti{
   position:fixed;
   top:-40px;
@@ -118,9 +93,9 @@ button{
   justify-content:center;
 }
 
-/* CARD */
+/* CARD (SIZE RESTORED) */
 .card{
-  width:260px;
+  width:340px;                /* 🔥 restored size */
   aspect-ratio:3/4;
   perspective:1200px;
 }
@@ -156,9 +131,9 @@ button{
   line-height:1.5;
 }
 
-/* CLICK ME – FAR RIGHT */
+/* ACTION BUTTON (SPACING PRESERVED) */
 .action-side{
-  min-width:280px;
+  min-width:280px;   /* ✅ keep distance */
   display:flex;
   align-items:center;
 }
@@ -168,7 +143,7 @@ button{
 .val-btn{background:#ff3b7a;color:white;}
 .bd-btn{background:#ff9f1c;color:white;}
 
-/* TRANSITIONS */
+/* TRANSITION */
 .fade-left{
   animation:fadeLeft 1s forwards;
 }
@@ -209,31 +184,30 @@ button{
 
 <!-- TRANSITION -->
 <div class="center box hidden" id="transition">
-  <h2 id="count">3</h2>
+  <h2>Okay… now it’s time to turn the energy up 🎉</h2>
 </div>
 
 <audio id="romantic" src="music/romantic.mp3" loop></audio>
 <audio id="birthday" src="music/birthday.mp3"></audio>
 
 <script>
-/* DATA */
 const romantic=[
  ["photos/romantic/romantic1.jpg","My favorite place has always been right next to you."],
- ["photos/romantic/romantic2.jpg","Somehow… you became home."],
+ ["photos/romantic/romantic2.jpg","I love this soft, cozy side of you."],
  ["photos/romantic/romantic3.jpg","Even simple days feel special with you."]
 ];
+
 const birthday=[
- ["photos/birthday/birthday1.jpg","Quarter of a century of being amazing."],
- ["photos/birthday/birthday2.jpg","Grace, strength, and that smile."],
- ["photos/birthday/birthday3.jpg","You light up every room."],
- ["photos/birthday/birthday4.jpg","Still my favorite person."],
- ["photos/birthday/birthday5.jpg","So many memories… more to come."],
- ["photos/birthday/birthday6.jpg","I choose you. Every day."]
+ ["photos/birthday/birthday1.jpg","The woman who lights up every room."],
+ ["photos/birthday/birthday2.jpg","Grace and beauty, always."],
+ ["photos/birthday/birthday3.jpg","So effortlessly you."],
+ ["photos/birthday/birthday4.jpg","Cute and mischievous 😌"],
+ ["photos/birthday/birthday5.jpg","You make life fun."],
+ ["photos/birthday/birthday6.jpg","My favorite future."]
 ];
 
 let set=romantic, i=0, noCount=0;
 
-/* ELEMENTS */
 const body=document.body;
 const banner=document.getElementById("banner");
 const fx=document.getElementById("fx");
@@ -243,6 +217,7 @@ const card=document.getElementById("card");
 const img=document.getElementById("img");
 const msg=document.getElementById("msg");
 const btn=document.getElementById("actionBtn");
+
 const romanticMusic=document.getElementById("romantic");
 const birthdayMusic=document.getElementById("birthday");
 
@@ -259,7 +234,7 @@ zone.onmousemove=()=>{
 /* YES */
 yes.onclick=()=>{
   start.classList.add("hidden");
-  body.className="valentine heartbeat";
+  body.className="valentine";
   banner.textContent="💕 Happy Valentine’s Day, baby 💕";
   banner.classList.remove("hidden");
   spawnRomanticFX();
@@ -268,7 +243,6 @@ yes.onclick=()=>{
   loadSlide();
 };
 
-/* ROMANTIC FX */
 function spawnRomanticFX(){
   fx.innerHTML="";
   for(let i=0;i<14;i++){
@@ -279,15 +253,8 @@ function spawnRomanticFX(){
     h.style.animationDuration=12+Math.random()*10+"s";
     fx.appendChild(h);
   }
-  const t=document.createElement("div");
-  t.className="floating-text";
-  t.textContent="Happy Valentine’s Day baby 💕";
-  t.style.left="-40%";
-  t.style.top="70%";
-  fx.appendChild(t);
 }
 
-/* SLIDES */
 function loadSlide(){
   card.className="card";
   img.src=set[i][0];
@@ -309,8 +276,14 @@ function nextSlide(){
   i++;
   if(i>=set.length){
     if(set===romantic){
-      slide.classList.add("hidden");
-      startCountdown();
+      set=birthday;
+      i=0;
+      romanticMusic.pause();
+      birthdayMusic.play();
+      body.className="birthday";
+      banner.textContent="🎂 Happy Birthday, baby 🎂";
+      spawnBirthdayFX();
+      loadSlide();
       return;
     }else{
       alert("Happy Valentine’s Day ❤️\nHappy Birthday 🎂");
@@ -320,39 +293,9 @@ function nextSlide(){
   loadSlide();
 }
 
-/* COUNTDOWN */
-function startCountdown(){
-  transition.classList.remove("hidden");
-  let c=3;
-  count.textContent=c;
-  const timer=setInterval(()=>{
-    c--;
-    count.textContent=c>0?c:"🎂";
-    if(c===0){
-      clearInterval(timer);
-      launchBirthday();
-    }
-  },1000);
-}
-
-/* BIRTHDAY */
-function launchBirthday(){
-  transition.classList.add("hidden");
-  body.className="birthday";
-  banner.textContent="🎂 Happy Birthday, baby 🎂";
-  romanticMusic.pause();
-  birthdayMusic.play();
-  spawnBirthdayFX();
-  set=birthday;
-  i=0;
-  btn.className="bd-btn";
-  slide.classList.remove("hidden");
-  loadSlide();
-}
-
 function spawnBirthdayFX(){
   fx.innerHTML="";
-  for(let i=0;i<25;i++){
+  for(let i=0;i<22;i++){
     const c=document.createElement("div");
     c.className="confetti";
     c.textContent=["🎉","🎂","🎈","💥"][Math.floor(Math.random()*4)];
