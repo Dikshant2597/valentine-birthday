@@ -16,13 +16,13 @@ body{
   transition:background 1s;
 }
 
-/* THEMES */
 body.start{background:#ffeef4;}
 body.valentine{background:radial-gradient(circle at top,#ffd1dc,#ff8fab);}
 body.birthday{background:linear-gradient(#fff0b3,#ffd166);}
 
 .hidden{display:none;}
 .center{width:900px;text-align:center;z-index:3;}
+
 .box{
   background:white;
   padding:32px;
@@ -39,12 +39,10 @@ button{
   cursor:pointer;
 }
 
-/* START */
 #yes{background:#ff3b7a;color:white;}
 #no{background:#eee;position:absolute;}
 .zone{position:relative;height:130px;margin-top:20px;}
 
-/* BANNER */
 .banner{
   position:fixed;
   top:18px;
@@ -58,7 +56,72 @@ button{
   z-index:4;
 }
 
-/* SLIDE LAYOUT */
+/* FX LAYER */
+.fx{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+}
+
+/* ROMANTIC FX */
+.heart{
+  position:absolute;
+  bottom:-120px;
+  font-size:120px;
+  opacity:.35;
+  animation:floatUp linear infinite;
+}
+.tulip{
+  position:absolute;
+  bottom:-120px;
+  font-size:90px;
+  opacity:.35;
+  animation:bloom 14s ease-in-out infinite;
+}
+
+@keyframes floatUp{
+  to{transform:translateY(-140vh);}
+}
+@keyframes bloom{
+  0%{transform:scale(.3);opacity:0;}
+  40%{opacity:.4;}
+  70%{transform:scale(1) translateY(-80vh);}
+  100%{opacity:0;}
+}
+
+/* BIRTHDAY FX */
+.confetti{
+  position:absolute;
+  top:-80px;
+  font-size:60px;
+  animation:fall linear infinite;
+}
+.rocket{
+  position:absolute;
+  bottom:-100px;
+  font-size:70px;
+  animation:launch 4s linear infinite;
+}
+.burst{
+  position:absolute;
+  font-size:90px;
+  animation:burst 2.5s ease-out infinite;
+}
+
+@keyframes fall{
+  to{transform:translateY(140vh);}
+}
+@keyframes launch{
+  to{transform:translateY(-140vh);}
+}
+@keyframes burst{
+  0%{opacity:0;transform:scale(.3);}
+  40%{opacity:1;}
+  100%{opacity:0;transform:scale(1.5);}
+}
+
+/* SLIDE */
 .slide-wrap{
   display:flex;
   gap:60px;
@@ -66,9 +129,8 @@ button{
   justify-content:center;
 }
 
-/* CARD – EXTRA EXTRA LARGE */
 .card{
-  width:720px;              /* 🔥 ~2× previous */
+  width:720px;
   aspect-ratio:3/4;
   perspective:1600px;
 }
@@ -104,7 +166,6 @@ button{
   line-height:1.6;
 }
 
-/* ACTION – SAME DISTANCE */
 .action-side{
   min-width:280px;
   display:flex;
@@ -113,6 +174,13 @@ button{
 #actionBtn{margin-left:40px;}
 .val-btn{background:#ff3b7a;color:white;}
 .bd-btn{background:#ff9f1c;color:white;}
+
+.fade-left{
+  animation:fadeLeft 1s forwards;
+}
+@keyframes fadeLeft{
+  to{opacity:0;transform:translateX(-120%);}
+}
 
 /* CONTRACT */
 .contract{
@@ -123,15 +191,16 @@ button{
 }
 .sign-box{
   border:2px dashed #ccc;
-  padding:20px;
+  padding:24px;
   border-radius:16px;
-  margin:20px auto;
+  margin:24px auto;
   cursor:pointer;
+  font-weight:700;
 }
 
 /* COUNTDOWN */
 .count{
-  font-size:80px;
+  font-size:100px;
   font-weight:900;
   animation:fade 1s ease-in-out;
 }
@@ -139,20 +208,13 @@ button{
   from{opacity:0;}
   to{opacity:1;}
 }
-
-/* TRANSITION */
-.fade-left{
-  animation:fadeLeft 1s forwards;
-}
-@keyframes fadeLeft{
-  to{opacity:0;transform:translateX(-120%);}
-}
 </style>
 </head>
 
 <body class="start">
 
 <div id="banner" class="banner hidden"></div>
+<div id="fx" class="fx"></div>
 
 <!-- START -->
 <div class="center box" id="start">
@@ -184,9 +246,7 @@ button{
     <h2>💖 Love Contract 💖</h2>
     <p>This certifies that we officially choose each other.</p>
     <p><strong>Signed by me:</strong> Dikshant ✍️</p>
-    <div class="sign-box" id="signBox">
-      Tap here to sign ✋
-    </div>
+    <div class="sign-box" id="signBox">Tap here to sign ✋</div>
   </div>
 </div>
 
@@ -214,7 +274,9 @@ const birthday=[
 ];
 
 let set=romantic, i=0, noCount=0;
+let contractDone=false;
 
+const fx=document.getElementById("fx");
 const start=document.getElementById("start");
 const slide=document.getElementById("slide");
 const contract=document.getElementById("contract");
@@ -228,7 +290,7 @@ const btn=document.getElementById("actionBtn");
 const romanticMusic=document.getElementById("romantic");
 const birthdayMusic=document.getElementById("birthday");
 
-/* NO */
+/* NO BUTTON */
 zone.onmousemove=()=>{
   const n=document.getElementById("no");
   n.style.left=Math.random()*200+"px";
@@ -243,9 +305,56 @@ yes.onclick=()=>{
   start.classList.add("hidden");
   document.body.className="valentine";
   romanticMusic.play();
+  spawnRomanticFX();
   slide.classList.remove("hidden");
   loadSlide();
 };
+
+function spawnRomanticFX(){
+  fx.innerHTML="";
+  for(let i=0;i<12;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="❤️";
+    h.style.left=Math.random()*100+"%";
+    h.style.animationDuration=12+Math.random()*10+"s";
+    fx.appendChild(h);
+  }
+  for(let i=0;i<8;i++){
+    const t=document.createElement("div");
+    t.className="tulip";
+    t.textContent="🌷";
+    t.style.left=Math.random()*100+"%";
+    fx.appendChild(t);
+  }
+}
+
+function spawnBirthdayFX(){
+  fx.innerHTML="";
+  for(let i=0;i<10;i++){
+    const r=document.createElement("div");
+    r.className="rocket";
+    r.textContent="🚀";
+    r.style.left=Math.random()*100+"%";
+    fx.appendChild(r);
+  }
+  for(let i=0;i<6;i++){
+    const b=document.createElement("div");
+    b.className="burst";
+    b.textContent="💥";
+    b.style.left=Math.random()*100+"%";
+    b.style.top=Math.random()*50+"%";
+    fx.appendChild(b);
+  }
+  for(let i=0;i<12;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.textContent=["🎉","🎂","🎈"][Math.floor(Math.random()*3)];
+    c.style.left=Math.random()*100+"%";
+    c.style.animationDuration=5+Math.random()*5+"s";
+    fx.appendChild(c);
+  }
+}
 
 function loadSlide(){
   card.className="card";
@@ -268,15 +377,20 @@ function nextSlide(){
   i++;
   if(i>=set.length){
     slide.classList.add("hidden");
-    contract.classList.remove("hidden");
+    if(set===romantic && !contractDone){
+      contract.classList.remove("hidden");
+      return;
+    }
+    endSequence();
     return;
   }
   loadSlide();
 }
 
-/* CONTRACT SIGN */
+/* CONTRACT */
 signBox.onclick=()=>{
   signBox.textContent="Thank you 😌 Haha now you are mine!! ❤️";
+  contractDone=true;
   setTimeout(startCountdown,1500);
 };
 
@@ -301,10 +415,15 @@ function launchBirthday(){
   document.body.className="birthday";
   romanticMusic.pause();
   birthdayMusic.play();
+  spawnBirthdayFX();
   set=birthday;
   i=0;
   slide.classList.remove("hidden");
   loadSlide();
+}
+
+function endSequence(){
+  alert("Happy Valentine’s Day ❤️\nAnd Happy Birthday 🎂");
 }
 </script>
 
