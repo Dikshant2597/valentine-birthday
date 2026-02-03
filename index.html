@@ -5,6 +5,7 @@
 <title>For You ❤️</title>
 
 <style>
+/* ================= BASE ================= */
 body{
   margin:0;
   font-family:system-ui, sans-serif;
@@ -13,11 +14,14 @@ body{
   justify-content:center;
   align-items:center;
   overflow:hidden;
-  transition:background 1s;
+  transition:background 3s;
 }
 
 body.start{background:#ffeef4;}
 body.valentine{background:radial-gradient(circle at top,#ffd1dc,#ff8fab);}
+body.transition{
+  background:linear-gradient(180deg,#ffd1dc,#ffd166);
+}
 body.birthday{background:linear-gradient(#fff0b3,#ffd166);}
 
 .hidden{display:none;}
@@ -39,10 +43,12 @@ button{
   cursor:pointer;
 }
 
+/* ================= START ================= */
 #yes{background:#ff3b7a;color:white;}
 #no{background:#eee;position:absolute;}
 .zone{position:relative;height:130px;margin-top:20px;}
 
+/* ================= BANNER ================= */
 .banner{
   position:fixed;
   top:18px;
@@ -56,7 +62,7 @@ button{
   z-index:4;
 }
 
-/* FX LAYER */
+/* ================= FX LAYER ================= */
 .fx{
   position:fixed;
   inset:0;
@@ -67,61 +73,55 @@ button{
 /* ROMANTIC FX */
 .heart{
   position:absolute;
-  bottom:-120px;
-  font-size:120px;
+  bottom:-140px;
+  font-size:140px;
   opacity:.35;
   animation:floatUp linear infinite;
 }
 .tulip{
   position:absolute;
-  bottom:-120px;
-  font-size:90px;
+  bottom:-140px;
+  font-size:110px;
   opacity:.35;
-  animation:bloom 14s ease-in-out infinite;
+  animation:bloom 16s ease-in-out infinite;
 }
 
-@keyframes floatUp{
-  to{transform:translateY(-140vh);}
-}
+@keyframes floatUp{to{transform:translateY(-160vh);}}
 @keyframes bloom{
-  0%{transform:scale(.3);opacity:0;}
+  0%{transform:scale(.2);opacity:0;}
   40%{opacity:.4;}
-  70%{transform:scale(1) translateY(-80vh);}
+  70%{transform:scale(1) translateY(-90vh);}
   100%{opacity:0;}
 }
 
 /* BIRTHDAY FX */
 .confetti{
   position:absolute;
-  top:-80px;
-  font-size:60px;
+  top:-100px;
+  font-size:70px;
   animation:fall linear infinite;
 }
 .rocket{
   position:absolute;
-  bottom:-100px;
-  font-size:70px;
+  bottom:-120px;
+  font-size:90px;
   animation:launch 4s linear infinite;
 }
 .burst{
   position:absolute;
-  font-size:90px;
-  animation:burst 2.5s ease-out infinite;
+  font-size:110px;
+  animation:burst 3s ease-out infinite;
 }
 
-@keyframes fall{
-  to{transform:translateY(140vh);}
-}
-@keyframes launch{
-  to{transform:translateY(-140vh);}
-}
+@keyframes fall{to{transform:translateY(160vh);}}
+@keyframes launch{to{transform:translateY(-160vh);}}
 @keyframes burst{
   0%{opacity:0;transform:scale(.3);}
   40%{opacity:1;}
-  100%{opacity:0;transform:scale(1.5);}
+  100%{opacity:0;transform:scale(1.6);}
 }
 
-/* SLIDE */
+/* ================= SLIDES ================= */
 .slide-wrap{
   display:flex;
   gap:60px;
@@ -166,23 +166,16 @@ button{
   line-height:1.6;
 }
 
-.action-side{
-  min-width:280px;
-  display:flex;
-  align-items:center;
-}
+/* CLICK ME */
+.action-side{min-width:280px;display:flex;align-items:center;}
 #actionBtn{margin-left:40px;}
 .val-btn{background:#ff3b7a;color:white;}
 .bd-btn{background:#ff9f1c;color:white;}
 
-.fade-left{
-  animation:fadeLeft 1s forwards;
-}
-@keyframes fadeLeft{
-  to{opacity:0;transform:translateX(-120%);}
-}
+.fade-left{animation:fadeLeft 1s forwards;}
+@keyframes fadeLeft{to{opacity:0;transform:translateX(-120%);}}
 
-/* CONTRACT */
+/* ================= CONTRACT ================= */
 .contract{
   background:white;
   padding:40px;
@@ -198,15 +191,14 @@ button{
   font-weight:700;
 }
 
-/* COUNTDOWN */
-.count{
-  font-size:100px;
-  font-weight:900;
-  animation:fade 1s ease-in-out;
-}
-@keyframes fade{
-  from{opacity:0;}
-  to{opacity:1;}
+/* ================= COUNTDOWN ================= */
+.count{font-size:120px;font-weight:900;}
+
+/* ================= FINAL LOCK ================= */
+.lock{
+  font-size:32px;
+  font-weight:800;
+  opacity:.9;
 }
 </style>
 </head>
@@ -225,7 +217,7 @@ button{
   </div>
 </div>
 
-<!-- SLIDE -->
+<!-- SLIDES -->
 <div class="center hidden" id="slide">
   <div class="slide-wrap">
     <div class="card" id="card">
@@ -240,12 +232,17 @@ button{
   </div>
 </div>
 
+<!-- WHY I CHOOSE YOU -->
+<div class="center box hidden" id="choose">
+  <h2>I choose you because…</h2>
+  <p id="chooseText"></p>
+</div>
+
 <!-- CONTRACT -->
 <div class="center hidden" id="contract">
   <div class="contract">
     <h2>💖 Love Contract 💖</h2>
-    <p>This certifies that we officially choose each other.</p>
-    <p><strong>Signed by me:</strong> Dikshant ✍️</p>
+    <p>Signed by me: <strong>Dikshant ✍️</strong></p>
     <div class="sign-box" id="signBox">Tap here to sign ✋</div>
   </div>
 </div>
@@ -255,10 +252,19 @@ button{
   <div id="countNum" class="count"></div>
 </div>
 
+<!-- LOCK -->
+<div class="center hidden" id="lock">
+  <div class="lock">
+    This page is locked.<br>
+    Only we have the key.
+  </div>
+</div>
+
 <audio id="romantic" src="music/romantic.mp3" loop></audio>
 <audio id="birthday" src="music/birthday.mp3"></audio>
 
 <script>
+/* ================= DATA ================= */
 const romantic=[
  ["photos/romantic/romantic1.jpg","My favorite place has always been right next to you."],
  ["photos/romantic/romantic2.jpg","I love this soft, cozy side of you."],
@@ -272,44 +278,42 @@ const birthday=[
  ["photos/birthday/birthday5.jpg","You make life fun."],
  ["photos/birthday/birthday6.jpg","My favorite future."]
 ];
+const chooseLines=[
+ "you calm my chaos",
+ "you make ordinary days special",
+ "you feel like home",
+ "you make me better"
+];
 
-let set=romantic, i=0, noCount=0;
-let contractDone=false;
+/* ================= STATE ================= */
+let set=romantic,i=0,noCount=0,contractDone=false;
 
+/* ================= ELEMENTS ================= */
 const fx=document.getElementById("fx");
-const start=document.getElementById("start");
 const slide=document.getElementById("slide");
-const contract=document.getElementById("contract");
-const countdown=document.getElementById("countdown");
-const countNum=document.getElementById("countNum");
-const card=document.getElementById("card");
 const img=document.getElementById("img");
 const msg=document.getElementById("msg");
 const btn=document.getElementById("actionBtn");
 
-const romanticMusic=document.getElementById("romantic");
-const birthdayMusic=document.getElementById("birthday");
-
-/* NO BUTTON */
+/* ================= NO BUTTON ================= */
 zone.onmousemove=()=>{
   const n=document.getElementById("no");
   n.style.left=Math.random()*200+"px";
   n.style.top=Math.random()*80+"px";
-  if(++noCount===4){
-    alert("Haha 😌 there’s no escape from me.\nYou HAVE to press YES 💕");
-  }
+  if(++noCount===4) alert("Haha 😌 there’s no escape from me.");
 };
 
-/* YES */
+/* ================= YES ================= */
 yes.onclick=()=>{
   start.classList.add("hidden");
   document.body.className="valentine";
-  romanticMusic.play();
+  romantic.play();
   spawnRomanticFX();
   slide.classList.remove("hidden");
   loadSlide();
 };
 
+/* ================= FX ================= */
 function spawnRomanticFX(){
   fx.innerHTML="";
   for(let i=0;i<12;i++){
@@ -331,14 +335,24 @@ function spawnRomanticFX(){
 
 function spawnBirthdayFX(){
   fx.innerHTML="";
-  for(let i=0;i<10;i++){
+  ["🎉","🎂","🎈"].forEach(e=>{
+    for(let i=0;i<6;i++){
+      const c=document.createElement("div");
+      c.className="confetti";
+      c.textContent=e;
+      c.style.left=Math.random()*100+"%";
+      c.style.animationDuration=5+Math.random()*5+"s";
+      fx.appendChild(c);
+    }
+  });
+  for(let i=0;i<6;i++){
     const r=document.createElement("div");
     r.className="rocket";
     r.textContent="🚀";
     r.style.left=Math.random()*100+"%";
     fx.appendChild(r);
   }
-  for(let i=0;i<6;i++){
+  for(let i=0;i<4;i++){
     const b=document.createElement("div");
     b.className="burst";
     b.textContent="💥";
@@ -346,16 +360,9 @@ function spawnBirthdayFX(){
     b.style.top=Math.random()*50+"%";
     fx.appendChild(b);
   }
-  for(let i=0;i<12;i++){
-    const c=document.createElement("div");
-    c.className="confetti";
-    c.textContent=["🎉","🎂","🎈"][Math.floor(Math.random()*3)];
-    c.style.left=Math.random()*100+"%";
-    c.style.animationDuration=5+Math.random()*5+"s";
-    fx.appendChild(c);
-  }
 }
 
+/* ================= SLIDES ================= */
 function loadSlide(){
   card.className="card";
   img.src=set[i][0];
@@ -378,18 +385,32 @@ function nextSlide(){
   if(i>=set.length){
     slide.classList.add("hidden");
     if(set===romantic && !contractDone){
-      contract.classList.remove("hidden");
+      showChoose();
       return;
     }
-    endSequence();
+    endAll();
     return;
   }
   loadSlide();
 }
 
-/* CONTRACT */
+/* ================= WHY I CHOOSE YOU ================= */
+function showChoose(){
+  choose.classList.remove("hidden");
+  let idx=0;
+  chooseText.textContent="";
+  const t=setInterval(()=>{
+    chooseText.textContent="– "+chooseLines[idx++];
+    if(idx>=chooseLines.length){
+      clearInterval(t);
+      setTimeout(()=>{choose.classList.add("hidden");contract.classList.remove("hidden");},1500);
+    }
+  },1200);
+}
+
+/* ================= CONTRACT ================= */
 signBox.onclick=()=>{
-  signBox.textContent="Thank you 😌 Haha now you are mine!! ❤️";
+  signBox.textContent="Haha 😌 now you are mine!! ❤️";
   contractDone=true;
   setTimeout(startCountdown,1500);
 };
@@ -401,29 +422,34 @@ function startCountdown(){
   countNum.textContent=c;
   const t=setInterval(()=>{
     c--;
-    if(c>0){
-      countNum.textContent=c;
-    }else{
+    if(c>0) countNum.textContent=c;
+    else{
       clearInterval(t);
       countdown.classList.add("hidden");
-      launchBirthday();
+      transitionToBirthday();
     }
   },1000);
 }
 
-function launchBirthday(){
-  document.body.className="birthday";
-  romanticMusic.pause();
-  birthdayMusic.play();
-  spawnBirthdayFX();
-  set=birthday;
-  i=0;
-  slide.classList.remove("hidden");
-  loadSlide();
+/* ================= TRANSITION ================= */
+function transitionToBirthday(){
+  document.body.className="transition";
+  setTimeout(()=>{
+    document.body.className="birthday";
+    romantic.pause();
+    birthday.play();
+    spawnBirthdayFX();
+    set=birthday;i=0;
+    slide.classList.remove("hidden");
+    loadSlide();
+  },3000);
 }
 
-function endSequence(){
-  alert("Happy Valentine’s Day ❤️\nAnd Happy Birthday 🎂");
+/* ================= END ================= */
+function endAll(){
+  alert("Happy Valentine’s Day ❤️\nHappy Birthday 🎂");
+  slide.classList.add("hidden");
+  lock.classList.remove("hidden");
 }
 </script>
 
